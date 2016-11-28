@@ -45,7 +45,8 @@ MethAnMap -S ${myNucleotides} -A ${myAnnotation} -O SKIP > ${myMapStats}
 MethAnMap -m 10 -S ${myNucleotides} -A ${myAnnotation} -O SKIP > ${myMapStats}
 MethAnMap -Z 0.5,0.2,0.2 -S ${myNucleotides} -A ${myAnnotation} -O SKIP > ${myMapStats}
 
-# Map nucleotides and get regions (with at least 3 cytosines and a maximal distance of 250 bp between two neighboring cytosines)
+# Map nucleotides and get regions (with at least 3 cytosines and a maximal
+# distance of 250 bp between two neighboring cytosines)
 MethAnMap -S ${myNucleotides} -A ${myAnnotation} -O ${myMappedNucleotides} -R ${myRegions} > ${myMapStats}
 
 # Get only the regions [works only for random subsets - i.e. if -Z is set]
