@@ -63,7 +63,7 @@ git clone https://github.com/MWSchmid/MethAn
 # Open MethAnMap.pro with QtCreator and build the program
 ```
 
-## Extract some useful files for the analysis in R
+## Extract some useful files for the analysis in R and plot meta-genes
 ```SH
 # Input
 myMappedNucleotides="/path/to/file/with/mapped/nucleotides.txt"
@@ -75,6 +75,28 @@ g2num="/path/to/file/with/gene/to/number/of/cytosines.txt"
 
 # Run makeMappingFiles.py
 python makeMappingFiles.py ${myMappedNucleotides} ${gf2dmc} ${g2gf} ${g2num}
+
+# Plot metagenes
+# Important - in plot_generic_gene.py, you need to adjust (class genomeHandler): 
+#   chromosome name and sizes (chromsizes)
+#   the path to the GFF file (in the function loadAnnotation)
+myMappedNucleotides="/path/to/file/with/mapped/nucleotides.txt"
+BASEDIR="/path/to/a/working/directory"
+BORDERSIZE=1000
+FRACTION=100
+WINDOWTYPE=blackman
+WINDOWSIZE=100
+ENDCORRECTION=100
+
+cd $BASEDIR
+awk '{print $1"\t"$3"\t"$7 > "forMetagene_ALL.txt"; print $1"\t"$3"\t"$7 > "forMetagene_"$6".txt"}' $myMappedNucleotides
+cd /path/to/MethAn
+
+for CONTEXT in CG CHG CHH; do
+INPUTFILE="$BASEDIR/forMetagene_${CONTEXT}.txt"
+OUTPUTFILE="$BASEDIR/metagene_${CONTEXT}.svg"
+python plot_generic_gene.py $INPUTFILE $OUTPUTFILE -fraction $FRACTION -window $WINDOWTYPE -window_len $WINDOWSIZE -bordersize $BORDERSIZE -endcorrection $ENDCORRECTION
+done
 ```
 
 ## R functions

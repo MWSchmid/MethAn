@@ -383,13 +383,8 @@ bool writeNucleotides(QList<nucleotide> &nucleotides, QString &fileName)
                    nuc.methylated << '\t' <<
                    nuc.unmethylated << '\t' <<
                    nuc.context << '\t';
-            if (!nuc.otherData.isEmpty()) {
-                foreach (QString entry, nuc.otherData) {
-                    out << entry << '\t';
-                }
-            }
             if (nuc.bestmappingfeatures.isEmpty()) {
-                out << "none,intergenic" << '\n';
+                out << "none,intergenic";
             }
             else {
                 out << nuc.bestmappingfeatures.at(0)->topParent()->data(0).toString() << ',' << nuc.bestmappingfeatures.at(0)->data(5).toString(); //the locusname and the feature
@@ -398,8 +393,13 @@ bool writeNucleotides(QList<nucleotide> &nucleotides, QString &fileName)
                         out << '|' << nuc.bestmappingfeatures.at(i)->topParent()->data(0).toString() << ',' << nuc.bestmappingfeatures.at(i)->data(5).toString(); //the locusname and the feature
                     }
                 }
-                out << '\n';
             }
+            if (!nuc.otherData.isEmpty()) {
+                foreach (QString entry, nuc.otherData) {
+                    out << '\t' << entry;
+                }
+            }
+            out << '\n';
         }
         out.flush();
 
