@@ -65,6 +65,8 @@ git clone https://github.com/MWSchmid/MethAn
 
 ## Extract some useful files for the analysis in R and plot meta-genes
 ```SH
+# ===============================================================================
+# Create mapping files for R (optional but faster than R-standalone)
 # Input
 myMappedNucleotides="/path/to/file/with/mapped/nucleotides.txt"
 
@@ -76,27 +78,50 @@ g2num="/path/to/file/with/gene/to/number/of/cytosines.txt"
 # Run makeMappingFiles.py
 python makeMappingFiles.py ${myMappedNucleotides} ${gf2dmc} ${g2gf} ${g2num}
 
+# ===============================================================================
 # Plot metagenes
 # Important - in plot_generic_gene.py, you need to adjust (class genomeHandler): 
 #   chromosome name and sizes (chromsizes)
 #   the path to the GFF file (in the function loadAnnotation)
 myMappedNucleotides="/path/to/file/with/mapped/nucleotides.txt"
-BASEDIR="/path/to/a/working/directory"
-BORDERSIZE=1000
-FRACTION=100
-WINDOWTYPE=blackman
-WINDOWSIZE=100
-ENDCORRECTION=100
+workingDirectory="/path/to/a/working/directory"
+borderSize=1000
+geneFraction=100
+windowType=blackman
+windowSize=100
+endCorrection=100
 
-cd $BASEDIR
-awk '{print $1"\t"$3"\t"$7 > "forMetagene_ALL.txt"; print $1"\t"$3"\t"$7 > "forMetagene_"$6".txt"}' $myMappedNucleotides
+cd ${workingDirectory}
+awk -v OFS='\t' '{print $1,$3,$7 > "forMetagene_ALL.txt"; print $1,$3,$7 > "forMetagene_"$6".txt"}' ${myMappedNucleotides}
 cd /path/to/MethAn
 
 for CONTEXT in CG CHG CHH; do
-INPUTFILE="$BASEDIR/forMetagene_${CONTEXT}.txt"
-OUTPUTFILE="$BASEDIR/metagene_${CONTEXT}.svg"
-python plot_generic_gene.py $INPUTFILE $OUTPUTFILE -fraction $FRACTION -window $WINDOWTYPE -window_len $WINDOWSIZE -bordersize $BORDERSIZE -endcorrection $ENDCORRECTION
+inputFile="${workingDirectory}/forMetagene_${CONTEXT}.txt"
+outputFile="${workingDirectory}/metagene_${CONTEXT}.svg"
+python plot_generic_gene.py inputFile outputFile -fraction ${geneFraction} -window ${windowType} -window_len ${windowSize} -bordersize ${borderSize} -endcorrection ${endCorrection}
 done
+
+# ===============================================================================
+# Get distances to a specific feature of the annotation
+# Important - in get_distance.py, you need to adjust (class genomeHandler): 
+#   chromosome name and sizes (chromsizes)
+myMappedNucleotides="/path/to/file/with/mapped/nucleotides.txt"
+workingDirectory="/path/to/a/working/directory"
+
+cd ${workingDirectory}
+awk -v OFS='\t' '{print $1,$3 > "forMetagene_ALL.txt"; print $1,$3 > "forDistance_"$6".txt"}' ${myMappedNucleotides}
+cd /path/to/MethAn
+
+gffFile="/path/to/a/gff/file.gff"
+gffFeature="one-GFF-feature"
+for CONTEXT in ALL CG CHG CHH; do
+inputFile="${workingDirectory}/forDistance_${CONTEXT}.txt"
+outputFile="${workingDirectory}/distance_to_${gffFeature}_${CONTEXT}.txt"
+python get_distance.py ${gffFile} ${gffFeature} ${inputFile} ${outputFile}
+done
+
+# note: you can use -useOverlap to include Cs which are within a feature
+# the number of overlapping Cs will be in the first row (starts with hash-tag to skip reading it later on)
 ```
 
 ## R functions
