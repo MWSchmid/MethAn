@@ -167,7 +167,7 @@ with open(statsFile, 'r') as infile:
 		(chrom, strPos) = line[:-1].split('\t')
 		pos = int(strPos)
 		(minDist, hasOverlap) = genome.queryOverlap(chrom, pos)
-		if hasOverlap and not useOverlap:
+		if hasOverlap:
 			withOverlap += 1
 			continue
 		distances[minDist] += 1
