@@ -95,7 +95,7 @@ cd ${workingDirectory}
 awk -v OFS='\t' '{print $1,$3,$7 > "forMetagene_ALL.txt"; print $1,$3,$7 > "forMetagene_"$6".txt"}' ${myMappedNucleotides}
 cd /path/to/MethAn
 
-for CONTEXT in CG CHG CHH; do
+for CONTEXT in ALL CG CHG CHH; do
 inputFile="${workingDirectory}/forMetagene_${CONTEXT}.txt"
 outputFile="${workingDirectory}/metagene_${CONTEXT}.svg"
 python plot_generic_gene.py inputFile outputFile -fraction ${geneFraction} -window ${windowType} -window_len ${windowSize} -bordersize ${borderSize} -endcorrection ${endCorrection}
