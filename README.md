@@ -99,13 +99,15 @@ windowSize=100
 endCorrection=100
 
 cd ${workingDirectory}
-awk -v OFS='\t' '{print $1,$3,$7 > "forMetagene_ALL.txt"; print $1,$3,$7 > "forMetagene_"$6".txt"}' ${myMappedNucleotides}
+awk -v OFS='\t' '{print $1,$3,$7 > "forMetagene_ALL.txt"; print $1,$3,$7 > "forMetagene_"$6".txt"}' \
+    ${myMappedNucleotides}
 cd /path/to/MethAn
 
 for CONTEXT in ALL CG CHG CHH; do
 inputFile="${workingDirectory}/forMetagene_${CONTEXT}.txt"
 outputFile="${workingDirectory}/metagene_${CONTEXT}.svg"
-python plot_generic_gene.py inputFile outputFile -fraction ${geneFraction} -window ${windowType} -window_len ${windowSize} -bordersize ${borderSize} -endcorrection ${endCorrection}
+python plot_generic_gene.py inputFile outputFile -fraction ${geneFraction} -window ${windowType} \
+    -window_len ${windowSize} -bordersize ${borderSize} -endcorrection ${endCorrection}
 done
 
 # ===============================================================================
@@ -119,7 +121,8 @@ myMappedNucleotides="/path/to/file/with/mapped/nucleotides.txt"
 workingDirectory="/path/to/a/working/directory"
 
 cd ${workingDirectory}
-awk -v OFS='\t' '{print $1,$3 > "forMetagene_ALL.txt"; print $1,$3 > "forDistance_"$6".txt"}' ${myMappedNucleotides}
+awk -v OFS='\t' '{print $1,$3 > "forMetagene_ALL.txt"; print $1,$3 > "forDistance_"$6".txt"}' \
+    ${myMappedNucleotides}
 cd /path/to/MethAn
 
 gffFile="/path/to/a/gff/file.gff"
@@ -140,7 +143,8 @@ numSets="the number of sets"
 randomDir="/path/to/a/folder/where/random/sets/will/be/stored"
 outSuffix="a suffix without file extension"
 
-createRandomNucleotideSets.sh -d ${myNucleotides} ${mySigNucleotides} ${myAnnotation} ${numSets} ${randomDir} ${outSuffix}
+createRandomNucleotideSets.sh -d ${myNucleotides} ${mySigNucleotides} ${myAnnotation} \
+    ${numSets} ${randomDir} ${outSuffix}
 
 # and now the distances to the feature
 gffFile="/path/to/a/gff/file.gff"
