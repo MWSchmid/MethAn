@@ -1,6 +1,13 @@
 # MethAn
 A collection of methylome analysis tools
 
+Note:
+* this tools are provided "as-they-are"
+* I used them for some methylome analysis in Arabidopsis - thus, the Python and R scripts:
+    * contain some hard-coded parameters (e.g. chromosome names are 1, 2, 3, 4, 5, Mt and Pt)
+    * are not optimized for large genomes (plot_generic_gene.py creates for each chromosome a list as long as the chromosome)
+* MethAnMap, the binary for mapping positions to the annotation is an exception in this respect. It deals with any genome (as long as the annotation and the genome sequence match).
+
 ## MethAnMap
 MethAnMap annotates cytosine positions to the annotation. A binary built on Kubuntu 16.04 is in the repository or can be downloaded [here](MethAnMap/MethAnMap?raw=true). Below some examples.
 
