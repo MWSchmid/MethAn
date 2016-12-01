@@ -2,7 +2,7 @@
 A collection of methylome analysis tools
 
 Note:
-* this tools are provided "as-they-are"
+* the tools are provided "as-they-are"
 * I used them for some methylome analysis in Arabidopsis - thus, the Python and R scripts:
     * contain some hard-coded parameters (e.g. chromosome names are 1, 2, 3, 4, 5, Mt and Pt)
     * are not optimized for large genomes (plot_generic_gene.py creates for each chromosome a list as long as the chromosome)
