@@ -951,6 +951,7 @@ f.draw.distance.between.DMCs.combined <- function(dmcTable, allPositions, rDir, 
 #'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
 #'@export
 f.create.regions <- function(dmcTable, minNum, maxDist) {
+  # could be optimized if necessary
   starts <- c()
   ends <- c()
   numbers <- c()

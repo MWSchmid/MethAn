@@ -216,7 +216,7 @@ RS="random_${RSN}"
 echo "processing ${RS}..."
 myMappedNucleotides="$outputDir/${RS}${outSuffix}.mappedNucleotides"
 myMapStats="$outputDir/${RS}${outSuffix}.stats"
-#$myFolder/MethAnMap/MethAnMap -Z "${FRAC_CG},${FRAC_CHG},${FRAC_CHH}" -S ${allNucleotides} -A ${annotationFile} -O ${myMappedNucleotides} > ${myMapStats}
+$myFolder/MethAnMap/MethAnMap -Z "${FRAC_CG},${FRAC_CHG},${FRAC_CHH}" -S ${allNucleotides} -A ${annotationFile} -O ${myMappedNucleotides} > ${myMapStats}
 output_exists $myMappedNucleotides
 output_exists $myMapStats
 if [[ $doDistance == yes ]]; then
