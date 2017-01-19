@@ -1,0 +1,16 @@
+# This file may be used to create an environment using:
+# $ install miniconda or anaconda
+# $ conda create --name <env_name> -c bioconda --file <this file>
+# then
+# $ source activate <env_name>
+# or
+# $ source deactivate
+# NOTE: trim_galore, bowtie2, bismark, PileOMeth, bgzip, tabix are needed as well
+numpy=1.11.2=py35_0
+pandas=0.19.0=np111py35_0
+python=3.5.1=5
+samtools=1.2
+seqtk=1.2
+cutadapt=1.10
+picard=2.3.0
+pandas=0.18.1

@@ -7,6 +7,95 @@ Note:
     * contain some hard-coded parameters (e.g. chromosome names are 1, 2, 3, 4, 5, Mt and Pt)
     * are not optimized for large genomes (plot_generic_gene.py creates for each chromosome a list as long as the chromosome)
 * MethAnMap, the binary for mapping positions to the annotation is an exception in this respect. It deals with any genome (as long as the annotation and the genome sequence match).
+* MethAnPre is as well generalized.
+
+## MethAnPre
+
+The scripts in [MethAnPre](MethAnPre) can be used for trimming, alignment, duplicate removal and methylation extraction. The scripts require:
+
+* [trim_galore](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
+* [bismark](http://www.bioinformatics.babraham.ac.uk/projects/bismark/)
+* [picard](https://broadinstitute.github.io/picard)
+* [Pile-O-Meth](https://bioconda.github.io/recipes/pileometh/README.html)
+* [samtools](https://github.com/samtools/samtools)
+* [tabix and bgzip](http://www.htslib.org/doc/tabix.html)
+
+### Install requirements for scripts in MethAnPre
+
+Download the [requirements](MethAnPre/requirements.txt?raw=true) to install some of the dependencies with conda.
+
+```SH
+# install miniconda3
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
+# logout/login again
+conda config --add channels r
+conda config --add channels bioconda
+
+# install whatever you can with conda
+conda install --file requirements.txt
+
+# bismark 0.16.3
+wget http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/bismark_v0.16.3.tar.gz
+tar xzf bismark_v0.16.3.tar.gz
+find ~/bismark_v0.16.3 -maxdepth 1 -type f -perm /a+x -exec sudo cp {} /usr/local/bin \;
+
+# trim_galore 0.4.1
+wget http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/trim_galore_v0.4.1.zip
+unzip trim_galore_v0.4.1.zip
+sudo cp trim_galore_zip/trim_galore /usr/local/bin/
+
+# PileOMeth
+git clone https://github.com/dpryan79/PileOMeth.git
+cd PileOMeth
+make
+sudo cp PileOMeth /usr/local/bin/
+cd
+```
+
+### Download and index a genome, trim, align, de-duplicate, extract methylation
+
+```SH
+# some paths and variables
+GENOME_FOLDER="/path/to/the/folder/with/the/genome"
+INDIR="/path/to/the/folder/containing/the/reads"
+OUTDIR="/path/to/the/folder/where/alignments/and/counts/will/be/stored"
+
+# download a genome and index it (TAIR10 as an example)
+wget ftp://ftp.ensemblgenomes.org/pub/plants/release-30/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.30.dna.genome.fa.gz
+mkdir -p $GENOME_FOLDER
+gunzip -c Arabidopsis_thaliana.TAIR10.30.dna.genome.fa.gz > $GENOME_FOLDER/At.fasta
+cd $GENOME_FOLDER
+bismark_genome_preparation --bowtie2 --genomic_composition ./
+cd
+
+# array of samples (i.e. file prefixes, _R1/2.fq.gz will be added later on)
+MYSAMPLES=("leaf_1" "leaf_2" "leaf_3" "root_1" "root_2" "root_3")
+
+# SINGLE-END reads
+for PREFIX in "${MYSAMPLES[@]}"; do
+FASTQFILE="${PREFIX}_R1.fq.gz"
+bismark_SE.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $GENOME_FOLDER
+bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/At.fasta"
+done
+
+# PAIRED-END reads
+for PREFIX in "${MYSAMPLES[@]}"; do
+FASTQFILE="${PREFIX}_R1.fq.gz"
+FASTQFILEREVERSE="${PREFIX}_R2.fq.gz"
+bismark_PE.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $FASTQFILEREVERSE $GENOME_FOLDER
+bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/At.fasta"
+done
+```
+
+### Merge BedGraphs and annotation into a long-format table
+
+**TODO**
+
+### Run a linear model for each cytosine
+
+**TODO**
 
 ## MethAnMap
 MethAnMap annotates cytosine positions to the annotation. A binary built on Kubuntu 16.04 is in the repository or can be downloaded [here](MethAnMap/MethAnMap?raw=true). Below some examples.
@@ -73,6 +162,7 @@ git clone https://github.com/MWSchmid/MethAn
 ```
 
 ## Extract some useful files for the analysis in R and plot meta-genes
+
 ```SH
 # ===============================================================================
 # Create mapping files for R (optional but faster than R-standalone)
