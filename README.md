@@ -42,7 +42,6 @@ conda config --add channels bioconda
 
 # install whatever you can with conda
 conda install --file requirements.txt
-conda install bowtie2
 
 # bismark 0.16.3
 wget http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/bismark_v0.16.3.tar.gz
@@ -53,6 +52,10 @@ find ~/bismark_v0.16.3 -maxdepth 1 -type f -perm /a+x -exec sudo cp {} /usr/loca
 wget http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/trim_galore_v0.4.1.zip
 unzip trim_galore_v0.4.1.zip
 sudo cp trim_galore_zip/trim_galore /usr/local/bin/
+
+# trimmomatic 0.36
+wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
+unzip Trimmomatic-0.36.zip
 
 # PileOMeth
 git clone https://github.com/dpryan79/PileOMeth.git
