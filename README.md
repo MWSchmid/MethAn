@@ -14,6 +14,7 @@ Note:
 The scripts in [MethAnPre](MethAnPre) can be used for trimming, alignment, duplicate removal and methylation extraction. The scripts require:
 
 * [trim_galore](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
+* [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)
 * [bismark](http://www.bioinformatics.babraham.ac.uk/projects/bismark/)
 * [picard](https://broadinstitute.github.io/picard)
 * [Pile-O-Meth](https://bioconda.github.io/recipes/pileometh/README.html)
@@ -63,9 +64,11 @@ cd PileOMeth
 make
 sudo cp PileOMeth /usr/local/bin/
 cd
-
-# NOTE: PileOMeth is now MethylDackel - TODO - check and update this README
 ```
+
+**TODO** PileOMeth is now MethylDackel - TODO - check and update this README
+
+**NOTE/TODO** We recently observed quite some differences with trimmomatic and trim_galore - check why?
 
 ### Download and index a genome, trim, align, de-duplicate, extract methylation
 
@@ -90,6 +93,8 @@ cd
 # array of samples (i.e. file prefixes, _R1/2.fq.gz will be added later on)
 MYSAMPLES=("leaf_1" "leaf_2" "leaf_3" "root_1" "root_2" "root_3")
 
+### Trimming with trim_galore
+
 # SINGLE-END reads
 for PREFIX in "${MYSAMPLES[@]}"; do
 FASTQFILE="${PREFIX}_R1.fq.gz"
@@ -102,6 +107,23 @@ for PREFIX in "${MYSAMPLES[@]}"; do
 FASTQFILE="${PREFIX}_R1.fq.gz"
 FASTQFILEREVERSE="${PREFIX}_R2.fq.gz"
 bismark_PE.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $FASTQFILEREVERSE $GENOME_FOLDER
+bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
+done
+
+### Trimming with trimmomatic
+
+# SINGLE-END reads
+for PREFIX in "${MYSAMPLES[@]}"; do
+FASTQFILE="${PREFIX}_R1.fq.gz"
+bismark_SE_trimmomatic.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $GENOME_FOLDER
+bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
+done
+
+# PAIRED-END reads
+for PREFIX in "${MYSAMPLES[@]}"; do
+FASTQFILE="${PREFIX}_R1.fq.gz"
+FASTQFILEREVERSE="${PREFIX}_R2.fq.gz"
+bismark_PE_trimmomatic.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $FASTQFILEREVERSE $GENOME_FOLDER
 bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
 done
 ```
