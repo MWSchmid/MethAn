@@ -14,3 +14,4 @@ seqtk=1.2
 cutadapt=1.10
 picard=2.3.0
 pandas=0.18.1
+bowtie2=2.3.0
