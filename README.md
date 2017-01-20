@@ -66,7 +66,7 @@ sudo cp PileOMeth /usr/local/bin/
 cd
 ```
 
-**TODO** PileOMeth is now MethylDackel - TODO - check and update this README
+**TODO** PileOMeth is now MethylDackel - check and update this README
 
 **NOTE/TODO** We recently observed quite some differences with trimmomatic and trim_galore - check why?
 
