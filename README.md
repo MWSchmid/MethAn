@@ -25,9 +25,16 @@ The scripts in [MethAnPre](MethAnPre) can be used for trimming, alignment, dupli
 Download the [requirements](MethAnPre/requirements.txt?raw=true) to install some of the dependencies with conda.
 
 ```SH
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install unzip build-essential zlibc zlib1g zlib1g-dev tabix git
+
 # install miniconda3
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
+
+# add conda to path
+export PATH="/home/ubuntu/miniconda3/bin:$PATH"
 
 # logout/login again
 conda config --add channels r
