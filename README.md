@@ -42,6 +42,7 @@ conda config --add channels bioconda
 
 # install whatever you can with conda
 conda install --file requirements.txt
+conda install bowtie2
 
 # bismark 0.16.3
 wget http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/bismark_v0.16.3.tar.gz
