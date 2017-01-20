@@ -72,13 +72,17 @@ cd
 ```SH
 # some paths and variables
 GENOME_FOLDER="/path/to/the/folder/with/the/genome"
+GENOME_FASTA="At.fasta"
 INDIR="/path/to/the/folder/containing/the/reads"
 OUTDIR="/path/to/the/folder/where/alignments/and/counts/will/be/stored"
+
+# add conda bin to path
+export PATH="/home/ubuntu/miniconda3/bin:$PATH"
 
 # download a genome and index it (TAIR10 as an example)
 wget ftp://ftp.ensemblgenomes.org/pub/plants/release-30/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.30.dna.genome.fa.gz
 mkdir -p $GENOME_FOLDER
-gunzip -c Arabidopsis_thaliana.TAIR10.30.dna.genome.fa.gz > $GENOME_FOLDER/At.fasta
+gunzip -c Arabidopsis_thaliana.TAIR10.30.dna.genome.fa.gz > $GENOME_FOLDER/$GENOME_FASTA
 cd $GENOME_FOLDER
 bismark_genome_preparation --bowtie2 --genomic_composition ./
 cd
@@ -90,7 +94,7 @@ MYSAMPLES=("leaf_1" "leaf_2" "leaf_3" "root_1" "root_2" "root_3")
 for PREFIX in "${MYSAMPLES[@]}"; do
 FASTQFILE="${PREFIX}_R1.fq.gz"
 bismark_SE.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $GENOME_FOLDER
-bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/At.fasta"
+bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
 done
 
 # PAIRED-END reads
@@ -98,7 +102,7 @@ for PREFIX in "${MYSAMPLES[@]}"; do
 FASTQFILE="${PREFIX}_R1.fq.gz"
 FASTQFILEREVERSE="${PREFIX}_R2.fq.gz"
 bismark_PE.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $FASTQFILEREVERSE $GENOME_FOLDER
-bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/At.fasta"
+bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
 done
 ```
 
