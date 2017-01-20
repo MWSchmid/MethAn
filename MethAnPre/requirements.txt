@@ -6,7 +6,6 @@
 # or
 # $ source deactivate
 # NOTE: trim_galore, bowtie2, bismark, PileOMeth, bgzip, tabix are needed as well
-numpy=1.11.2=py35_0
 pandas=0.19.0=np111py35_0
 python=3.5.1=5
 samtools=1.2
