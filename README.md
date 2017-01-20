@@ -63,6 +63,8 @@ cd PileOMeth
 make
 sudo cp PileOMeth /usr/local/bin/
 cd
+
+# NOTE: PileOMeth is now MethylDackel - TODO - check and update this README
 ```
 
 ### Download and index a genome, trim, align, de-duplicate, extract methylation
