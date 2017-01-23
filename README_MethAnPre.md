@@ -116,7 +116,68 @@ done
 
 # Merge BedGraphs and annotation into a long-format table
 
-**TODO**
+Merge BED graphs produced by bismark_SE/PE.sh and bamToBedGraph.sh and a sample annotation file into a single long-format table (for lm() in R). The format of the sample annotation table (taken from the mergeBedGraphs.py help):
+
+* <required columns>
+    * sampleID
+    * bedFile
+    * group (should be the smallest grouping possible)
+
+* <optional columns>
+    * other factors which will be used in the model later on
+
+* <example>
+    * sampleID,bedFile,group,organ,sex
+    * lm1,lm1.bed,liver_male,liver,male
+    * lm2,lm2.bed,liver_male,liver,male
+    * lm3,lm3.bed,liver_male,liver,male
+    * lf1,lf1.bed,liver_female,liver,female
+    * lf2,lf2.bed,liver_female,liver,female
+    * lf3,lf3.bed,liver_female,liver,female
+    * hm1,hm1.bed,heart_male,heart,male
+    * hm2,hm2.bed,heart_male,heart,male
+    * hm3,hm3.bed,heart_male,heart,male
+    * hf1,hf1.bed,heart_female,heart,female
+    * hf2,hf2.bed,heart_female,heart,female
+    * hf3,hf3.bed,heart_female,heart,female
+
+* Notes:
+    * group = <organ>_<sex> (generally the most detailed grouping possible)
+    * the bed files do not have to contain the sampleID in their names, but you should provide the full path
+
+The example below assumes that you have three tables which are identical except for the file paths (different because of the three separate and different contexts):
+
+* sampleTableForMerge_CpG.csv
+* sampleTableForMerge_CHG.csv
+* sampleTableForMerge_CHH.csv
+
+For each context (or chromosome and context if kept separate), the script will produce two files:
+* one only with positions having a coverage of at least 5 within at least one replicate per group (name as specified on the command line - e.g. merged_CpG.txt).
+* one only with positions having a coverage of at least 5 in any sample (name as specified on the command line plus ending ".noGroupFilter" - e.g. merged_CpG.txt.noGroupFilter)
+
+
+```SH
+# extract all chromosome identifiers
+GENOME_FOLDER="/path/to/the/folder/with/the/genome"
+GENOME_FASTA="At.fasta"
+grep ">" $GENOME_FOLDER/$GENOME_FASTA | awk '{print $1}' | sed 's/>//g' > allChroms.txt
+
+# add MethAnPre to the path env-var
+export PATH="$HOME/MethAn/MethAnPre:$PATH"
+
+# either: keep chromosomes separate
+ALLCHROMS=($(<allChroms.txt))
+for CHROM in "${ALLCHROMS[@]}"; do
+for CTXT in CpG CHG CHH; do
+mergeBedGraphs.py $CHROM $CTXT sampleTableForMerge_${CTXT}.csv merged_${CTXT}_{CHROM}.txt
+done
+done
+
+# or: merge all chromosomes into one file
+for CTXT in CpG CHG CHH; do
+mergeBedGraphs.py allChroms.txt $CTXT sampleTableForMerge_${CTXT}.csv merged_${CTXT}.txt
+done
+```
 
 
 # Run a linear model for each cytosine

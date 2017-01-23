@@ -78,16 +78,23 @@ def mergeBedGraphs(sampleTableFile, chrom, ctxt, outfileName, query=None, bedFil
     
     # merge the bedGraphs
     logging.info("Merging BED files.")
+    okCounter = 0
+    chromCounter = 1
     if not os.path.isfile(chrom):
-        mergeFiles(sampleTab, chrom, ctxt, outfileName, bedFileType)
+        worked = mergeFiles(sampleTab, chrom, ctxt, outfileName, bedFileType)
+        if worked:
+            okCounter += 1
     else:
         with open(chrom, "rb") as infile:
             chromList = [line[:-1].decode("ascii") for line in infile]
+        chromCounter = len(chromList)
         for chrom in chromList:
-            mergeFiles(sampleTab, chrom, ctxt, outfileName, bedFileType)
+            worked = mergeFiles(sampleTab, chrom, ctxt, outfileName, bedFileType)
+            if worked:
+                okCounter += 1
     
     # no return, just print a time information
-    logging.info("Finished.")
+    logging.info("Finished ("+str(okCounter)+"/"+str(chromCounter)+" with data/total)")
     pass
 
 
@@ -124,9 +131,13 @@ def mergeFiles(sampleTab, chrom, ctxt, outfileName, fileType="MethAn_bismark", i
     LOAD = 1e6
     
     supChrom = chromSupremum(inputFiles, chrom)
+    if supChrom == None:
+        logging.info("Skipping because chromosome is missing.")
+        return False
     supNsites = nsitesSupremum(inputFiles, chrom)
-    if supNsites == 0:
-        pass
+    if supNsites == None or supNsites == 0:
+        logging.info("Skipping because there are no entries.")
+        return False
     stepSize = math.ceil(supChrom/supNsites * LOAD)
 
     if stepSize < supChrom:
@@ -203,7 +214,7 @@ def mergeFiles(sampleTab, chrom, ctxt, outfileName, fileType="MethAn_bismark", i
         writeHeader = not os.path.isfile(outfileNameNoGroupFilter)
         mergedTab.query("coverage>=5").to_csv(outfileNameNoGroupFilter, header=writeHeader, sep='\t', index=False, mode='a')
         
-    pass
+    return True
 
 
 def chromSupremum(tabixfiles, chrom):
@@ -222,8 +233,12 @@ def chromSupremum(tabixfiles, chrom):
             end_coordinate.append(base_position)
         except ValueError:
             continue
-
-    return np.max(end_coordinate)
+    
+    try:
+        out = np.max(end_coordinate)
+    except ValueError:
+        out = None
+    return out
 
 
 def nsitesSupremum(tabixfiles, chrom):
@@ -242,7 +257,11 @@ def nsitesSupremum(tabixfiles, chrom):
         except ValueError:
             continue
 
-    return np.max(sites)
+    try:
+        out = np.max(sites)
+    except ValueError:
+        out = None
+    return out
 
 
 def impute(data, method='pseudocount'):
