@@ -7,136 +7,21 @@ Note:
     * contain some hard-coded parameters (e.g. chromosome names are 1, 2, 3, 4, 5, Mt and Pt)
     * are not optimized for large genomes (plot_generic_gene.py creates for each chromosome a list as long as the chromosome)
 * MethAnMap, the binary for mapping positions to the annotation is an exception in this respect. It deals with any genome (as long as the annotation and the genome sequence match).
-* MethAnPre is as well generalized.
+* MethAnPre is as quite well generalized.
+
+Clone the repo and make scripts executable:
+```SH
+git clone https://github.com/MWSchmid/MethAn
+sudo chmod +x MethAn/MethAnPre/*.{sh,py}
+sudo chmod +x MethAn/*.{sh,py}
+```
 
 ## MethAnPre
 
-The scripts in [MethAnPre](MethAnPre) can be used for trimming, alignment, duplicate removal and methylation extraction. The scripts require:
-
-* [trim_galore](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
-* [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)
-* [bismark](http://www.bioinformatics.babraham.ac.uk/projects/bismark/)
-* [picard](https://broadinstitute.github.io/picard)
-* [Pile-O-Meth](https://bioconda.github.io/recipes/pileometh/README.html)
-* [samtools](https://github.com/samtools/samtools)
-* [tabix and bgzip](http://www.htslib.org/doc/tabix.html)
-
-### Install requirements for scripts in MethAnPre
-
-Download the [requirements](MethAnPre/requirements.txt?raw=true) to install some of the dependencies with conda.
-
-```SH
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install unzip build-essential zlibc zlib1g zlib1g-dev tabix git
-
-# install miniconda3
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-
-# add conda to path
-export PATH="/home/ubuntu/miniconda3/bin:$PATH"
-
-# logout/login again
-conda config --add channels r
-conda config --add channels bioconda
-
-# install whatever you can with conda
-conda install --file requirements.txt
-
-# bismark 0.16.3
-wget http://www.bioinformatics.bbsrc.ac.uk/projects/bismark/bismark_v0.16.3.tar.gz
-tar xzf bismark_v0.16.3.tar.gz
-find ~/bismark_v0.16.3 -maxdepth 1 -type f -perm /a+x -exec sudo cp {} /usr/local/bin \;
-
-# trim_galore 0.4.1
-wget http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/trim_galore_v0.4.1.zip
-unzip trim_galore_v0.4.1.zip
-sudo cp trim_galore_zip/trim_galore /usr/local/bin/
-
-# trimmomatic 0.36
-wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
-unzip Trimmomatic-0.36.zip
-
-# PileOMeth
-git clone https://github.com/dpryan79/PileOMeth.git
-cd PileOMeth
-make
-sudo cp PileOMeth /usr/local/bin/
-cd
-```
-
-**TODO** PileOMeth is now MethylDackel - check and update this README
-
-**NOTE/TODO** We recently observed quite some differences with trimmomatic and trim_galore - check why?
-
-### Download and index a genome, trim, align, de-duplicate, extract methylation
-
-```SH
-# some paths and variables
-GENOME_FOLDER="/path/to/the/folder/with/the/genome"
-GENOME_FASTA="At.fasta"
-INDIR="/path/to/the/folder/containing/the/reads"
-OUTDIR="/path/to/the/folder/where/alignments/and/counts/will/be/stored"
-
-# add conda bin to path
-export PATH="/home/ubuntu/miniconda3/bin:$PATH"
-
-# download a genome and index it (TAIR10 as an example)
-wget ftp://ftp.ensemblgenomes.org/pub/plants/release-30/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.30.dna.genome.fa.gz
-mkdir -p $GENOME_FOLDER
-gunzip -c Arabidopsis_thaliana.TAIR10.30.dna.genome.fa.gz > $GENOME_FOLDER/$GENOME_FASTA
-cd $GENOME_FOLDER
-bismark_genome_preparation --bowtie2 --genomic_composition ./
-cd
-
-# array of samples (i.e. file prefixes, _R1/2.fq.gz will be added later on)
-MYSAMPLES=("leaf_1" "leaf_2" "leaf_3" "root_1" "root_2" "root_3")
-
-### Trimming with trim_galore
-
-# SINGLE-END reads
-for PREFIX in "${MYSAMPLES[@]}"; do
-FASTQFILE="${PREFIX}_R1.fq.gz"
-bismark_SE.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $GENOME_FOLDER
-bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
-done
-
-# PAIRED-END reads
-for PREFIX in "${MYSAMPLES[@]}"; do
-FASTQFILE="${PREFIX}_R1.fq.gz"
-FASTQFILEREVERSE="${PREFIX}_R2.fq.gz"
-bismark_PE.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $FASTQFILEREVERSE $GENOME_FOLDER
-bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
-done
-
-### Trimming with trimmomatic
-
-# SINGLE-END reads
-for PREFIX in "${MYSAMPLES[@]}"; do
-FASTQFILE="${PREFIX}_R1.fq.gz"
-bismark_SE_trimmomatic.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $GENOME_FOLDER
-bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
-done
-
-# PAIRED-END reads
-for PREFIX in "${MYSAMPLES[@]}"; do
-FASTQFILE="${PREFIX}_R1.fq.gz"
-FASTQFILEREVERSE="${PREFIX}_R2.fq.gz"
-bismark_PE_trimmomatic.sh $INDIR $OUTDIR $PREFIX $FASTQFILE $FASTQFILEREVERSE $GENOME_FOLDER
-bamToBedGraph.sh $OUTDIR $OUTDIR $PREFIX "${PREFIX}.dupMarked.sorted.bam" "$GENOME_FOLDER/$GENOME_FASTA"
-done
-```
-
-### Merge BedGraphs and annotation into a long-format table
-
-**TODO**
-
-### Run a linear model for each cytosine
-
-**TODO**
+A separate documentation for the preprocessing scripts can be found [here](README_MethAnPre.md).
 
 ## MethAnMap
+
 MethAnMap annotates cytosine positions to the annotation. A binary built on Kubuntu 16.04 is in the repository or can be downloaded [here](MethAnMap/MethAnMap?raw=true). Below some examples.
 
 Required input:
@@ -154,6 +39,9 @@ Required input:
 Note that the mapping statistics will make use of the priorities set with Rcount-format.
 
 ```SH
+### Add binary to path or modify the PATH env-var ###
+export PATH="$HOME/MethAn/MethAnMap:$PATH"
+
 ### Required files ###
 
 # Input
@@ -203,6 +91,9 @@ git clone https://github.com/MWSchmid/MethAn
 ## Extract some useful files for the analysis in R and plot meta-genes
 
 ```SH
+### Add binary to path or modify the PATH env-var ###
+export PATH="$HOME/MethAn:$PATH"
+
 # ===============================================================================
 # Create mapping files for R (optional but faster than R-standalone)
 # Input
@@ -214,7 +105,7 @@ g2gf="/path/to/file/with/gene/to/gene-feature.txt"
 g2num="/path/to/file/with/gene/to/number/of/cytosines.txt"
 
 # Run makeMappingFiles.py
-python makeMappingFiles.py ${myMappedNucleotides} ${gf2dmc} ${g2gf} ${g2num}
+makeMappingFiles.py ${myMappedNucleotides} ${gf2dmc} ${g2gf} ${g2num}
 
 # ===============================================================================
 # Plot metagenes
@@ -237,7 +128,7 @@ cd /path/to/MethAn
 for CONTEXT in ALL CG CHG CHH; do
 inputFile="${workingDirectory}/forMetagene_${CONTEXT}.txt"
 outputFile="${workingDirectory}/metagene_${CONTEXT}.svg"
-python plot_generic_gene.py inputFile outputFile -fraction ${geneFraction} -window ${windowType} \
+plot_generic_gene.py inputFile outputFile -fraction ${geneFraction} -window ${windowType} \
     -window_len ${windowSize} -bordersize ${borderSize} -endcorrection ${endCorrection}
 done
 
@@ -261,7 +152,7 @@ gffFeature="one-GFF-feature"
 for CONTEXT in ALL CG CHG CHH; do
 inputFile="${workingDirectory}/forDistance_${CONTEXT}.txt"
 outputFile="${workingDirectory}/distance_to_${gffFeature}_${CONTEXT}.txt"
-python get_distance.py ${gffFile} ${gffFeature} ${inputFile} ${outputFile} -useOverlap
+get_distance.py ${gffFile} ${gffFeature} ${inputFile} ${outputFile} -useOverlap
 done
 
 # ===============================================================================
@@ -286,7 +177,7 @@ echo "processing ${RS}..."
 for CONTEXT in ALL CG CHG CHH; do
 inputFile="${randomDir}/${RS}${outSuffix}_forDistance_${CONTEXT}.txt"
 outputFile="${randomDir}/${RS}${outSuffix}_${gffFeature}_${CONTEXT}.txt"
-python get_distance.py ${gffFile} ${gffFeature} ${inputFile} ${outputFile} -useOverlap
+get_distance.py ${gffFile} ${gffFeature} ${inputFile} ${outputFile} -useOverlap
 done
 done
 
