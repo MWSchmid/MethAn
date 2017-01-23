@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# bismark_SE.sh -- Align SE reads with bismark.
+# bismark_SE_trimmomatic.sh -- Align SE reads with bismark.
 #
 # Authors: Marc W. Schmid <marcschmid@gmx.ch>
 #
@@ -214,7 +214,7 @@ input_exists ${trimmomatic}
 
 command="java -Xmx${maxMem}g -jar ${trimmomatic} SE -threads ${threads} -phred33\
 	${inputDir}/${inputFile} ${outputDir}/${inputFile%%.*}_trimmed.fq.gz\
-	ILLUMINACLIP:${adapterSeqs}:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:5:30 MINLEN:50"
+	ILLUMINACLIP:${adapterSeqs}:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:5:20 MINLEN:50"
 echo "=== ${me}: Running: ${command}"
 eval $command
 rc=$?

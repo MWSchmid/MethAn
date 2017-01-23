@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# bismark_PE.sh -- Align PE reads with bismark.
+# bismark_PE_trimmomatic.sh -- Align PE reads with bismark.
 #
 # Authors: Marc W. Schmid <marcschmid@gmx.ch>
 #
@@ -220,7 +220,7 @@ command="java -Xmx${maxMem}g -jar ${trimmomatic} PE -threads ${threads} -phred33
 	${inputDir}/${inputFile} ${inputDir}/${inputFileReverse}\
 	${outputDir}/${inputFile%%.*}_paired.tr.fq.gz ${outputDir}/${inputFile%%.*}_unpaired.tr.fq.gz\
 	${outputDir}/${inputFileReverse%%.*}_paired.tr.fq.gz ${outputDir}/${inputFileReverse%%.*}_unpaired.tr.fq.gz\
-	ILLUMINACLIP:${adapterSeqs}:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:5:30 MINLEN:50"
+	ILLUMINACLIP:${adapterSeqs}:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:5:20 MINLEN:50"
 echo "=== ${me}: Running: ${command}"
 eval $command
 rc=$?
