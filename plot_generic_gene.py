@@ -159,7 +159,7 @@ class genomeHandler:
 	
 	def loadAnnotation(self):
 		reg_meta_agi = re.compile('AT\w{2,2}\d{5,5}', re.IGNORECASE)
-		with open("/home/marc/Projects/Onder/TAIR10.v2.sorted.gff", 'r') as infile:
+		with open("data/TAIR10.v2.sorted.gff", 'r') as infile:
 			for line in infile:
 				if "protein_coding_gene" not in line:
 					continue
