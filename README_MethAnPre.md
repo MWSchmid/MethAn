@@ -192,9 +192,11 @@ Rscript myModel.R $SPLITFILE
 done
 
 # merge the output
+cat forModels_split_*.mod | awk '{if (NR<2) {print} else {if ($1!="chrom") {print|"sort -k1,1V -k2,2n"} else {next}}}' > modelResults.txt
+done
 
 # correct for multiple testing (FDR and Q-values)
-
+Rscript adjustP.R modelResults.txt
 ```
 
 
