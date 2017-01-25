@@ -152,7 +152,7 @@ The example below assumes that you have three tables which are identical except 
 * sampleTableForMerge_CHH.csv
 
 For each context (or chromosome and context if kept separate), the script will produce two files:
-* one only with positions having a coverage of at least 5 within at least one replicate per group (name as specified on the command line - e.g. merged_CpG.txt).
+* one only with positions having a coverage of at least 5 within at least two replicates per group (name as specified on the command line - e.g. merged_CpG.txt).
 * one only with positions having a coverage of at least 5 in any sample (name as specified on the command line plus ending ".noGroupFilter" - e.g. merged_CpG.txt.noGroupFilter)
 
 
@@ -177,9 +177,33 @@ done
 for CTXT in CpG CHG CHH; do
 mergeBedGraphs.py allChroms.txt $CTXT sampleTableForMerge_${CTXT}.csv merged_${CTXT}.txt
 done
+
+# to merge also the contexts (with sorting)
+cat merged_*.txt | awk '{if (NR<2) {print} else {if ($1!="chrom") {print|"sort -k1,1V -k2,2n -k6,6V"} else {next}}}' > merged.txt
+cat merged_*.txt.noGroupFilter | awk '{if (NR<2) {print} else {if ($1!="chrom") {print|"sort -k1,1V -k2,2n -k6,6V"} else {next}}}' > merged.txt.noGroupFilter
+
+# split large files into smaller chunks for the models in R
+awk -v PREF="forModels" 'BEGIN{LASTPOS=-1;LASTBIN=0;CUROUT=PREF"_split_"LASTBIN".txt"}{CURBIN=int((NR-1)/6000000);CURPOS=$2;if((CURBIN!=LASTBIN)&&(CURPOS!=LASTPOS)){CUROUT=PREF"_split_"CURBIN".txt";LASTBIN=CURBIN};LASTPOS=CURPOS;if(NR>1){print>CUROUT}}' merged.txt
+done
+
+# run the Rscript with the model (see below)
+for SPLITFILE in forModels_split_*; do
+Rscript myModel.R $SPLITFILE
+done
+
+# merge the output
+
+# correct for multiple testing (FDR and Q-values)
+
 ```
 
 
-# Run a linear model for each cytosine
+# Rscript for running a linear model on each cytosine
 
 **TODO**
+
+
+
+
+
+

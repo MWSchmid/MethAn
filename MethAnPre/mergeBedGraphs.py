@@ -198,7 +198,7 @@ def mergeFiles(sampleTab, chrom, ctxt, outfileName, fileType="MethAn_bismark", i
         #mergedTab = mergedTab[mergedTab["cov"]>=5]
         #mergedTabGrouped = mergedTab.groupby(by=["pos", "group"])
         #groupCounts = mergedTabGrouped.apply(lambda g: len(g))
-        minGroupCount = 1
+        minGroupCount = 2
         groupCounts = mergedTab.query("coverage>=5").groupby(by=["pos", "group"])["coverage"].size()
         posCounts = groupCounts[groupCounts>=minGroupCount].count(level="pos")
         okPositions = list(posCounts[posCounts == len(set(groups))].index)
