@@ -19,7 +19,6 @@ public:
     float coverage;
     bool ismethylated;
     float percentMethylated;
-    // set in getNucContext
     QString strand;
     QString context;
     QStringList otherData;
@@ -32,6 +31,7 @@ public:
         this->coverage = coverage.toFloat();
         this->percentMethylated = percentMethylated.toFloat();
         this->chrom = chrom;
+        this->strand = ".";
         this->position = position.toUInt();
         this->methylated = floor(this->coverage*(this->percentMethylated/100.0));
         this->unmethylated = this->coverage-this->methylated;
