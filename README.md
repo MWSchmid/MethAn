@@ -128,7 +128,7 @@ cd /path/to/MethAn
 for CONTEXT in ALL CG CHG CHH; do
 inputFile="${workingDirectory}/forMetagene_${CONTEXT}.txt"
 outputFile="${workingDirectory}/metagene_${CONTEXT}.svg"
-plot_generic_gene.py inputFile outputFile -fraction ${geneFraction} -window ${windowType} \
+plot_generic_gene.py ${inputFile} ${outputFile} -fraction ${geneFraction} -window ${windowType} \
     -window_len ${windowSize} -bordersize ${borderSize} -endcorrection ${endCorrection}
 done
 
