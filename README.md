@@ -36,7 +36,7 @@ Required input:
     * there is an annotation with 2 kb flanking regions [available here](data/Araport11_annotation_with_2kb_flank.xml.zip?raw=true). It was generated with a [reformatted Araport 11 GFF](data/Araport11_ref_noChr.gff.zip?raw=true) and is compatible with the TAIR10 reference assembly (just make sure that the chromosomes are named 1, 2, 3, 4, 5, Mt and Pt). The priorities for the annotation were set like shown [here](data/Araport11_annotation_with_2kb_flank.png). Finally, there is also a [TEGtoTEfile available here](data/TEGtoTE.txt.zip?raw=true) (see below for what it can be used).
 
     
-Note that the mapping statistics will make use of the priorities set with Rcount-format.
+Note that the mapping statistics will make use of the priorities set with Rcount-format. Note that priorities are compared to each other on all levels (i.e. exons should have a higher priority than "mRNA", "gene", "transposon" or alike)!
 
 ```SH
 ### Add binary to path or modify the PATH env-var ###
@@ -86,6 +86,16 @@ git clone https://github.com/MWSchmid/Rcount
 git clone https://github.com/MWSchmid/MethAn
 
 # Open MethAnMap.pro with QtCreator and build the program
+
+# The binary was built on Kubuntu 16.04 and using it on
+# (K)ubuntu 14.04 will probably give an error like:
+# version 'GLIBCXX_3.4.21'' not found
+# To check what you have:
+strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBC
+# To get the newest libraries:
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install g++-4.9
 ```
 
 ## Extract some useful files for the analysis in R and plot meta-genes
