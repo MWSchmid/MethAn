@@ -34,3 +34,5 @@ INCLUDEPATH+= ../../Rcount/source_V2/zlib-1.2.8 \
               ../../Rcount/source_V2/
 
 LIBS += -lz
+
+QMAKE_CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
