@@ -130,11 +130,15 @@ for (ctxt in myContexts) {
   cR <- paste(ctxt, c("meCnum", "deCnum"), sep = '_')
   meCol <- contextColors["meCnum", ctxt]
   deCol <- contextColors["deCnum", ctxt]
-  radial.plot(percPlots[cR,], labels = labs, main = ctxt, radial.lim = seq(0,60,10), 
+  percMax <- max(ceiling(percPlots[cR,]/10), na.rm = TRUE)*10
+  if (percMax < 10) {percMax <- 10}
+  acrossPercMax <- max(ceiling(acrossPercPlots[cR,]/10), na.rm = TRUE)*10
+  if (acrossPercMax < 10) {acrossPercMax <- 10}
+  radial.plot(percPlots[cR,], labels = labs, main = ctxt, radial.lim = seq(0, percMax,10), 
               start = pi/2, line.col = c(meCol,deCol), poly.col = c(meCol, NA),
               rp.type = "p", show.grid.labels = 3, lwd = 3, point.symbols = 16,
               point.col = c(meCol,deCol), show.centroid = FALSE)
-  radial.plot(acrossPercPlots[cR,], labels = labs, main = ctxt, radial.lim = seq(0,60,10),
+  radial.plot(acrossPercPlots[cR,], labels = labs, main = ctxt, radial.lim = seq(0, acrossPercMax,10),
               start = pi/2, line.col = c(meCol,deCol), poly.col = c(meCol, NA),
               rp.type = "p", show.grid.labels = 3, lwd = 3, point.symbols = 16,
               point.col = c(meCol,deCol), show.centroid = FALSE)
@@ -145,5 +149,4 @@ for (ctxt in myContexts) {
 }
 dev.off()
 write.csv(numPlots, file.path(rDir, paste0(outPrefix, "_spiderGraphNumbers.csv")), quote = FALSE)
-
 f.print.message("FINISHED")
