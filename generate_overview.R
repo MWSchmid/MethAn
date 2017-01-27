@@ -76,6 +76,6 @@ genes2xyzWithoutTEG <- f.remove.tegs.from.genes2xyz(genes2xyzWithTEG, TEGtoTEfil
 
 f.print.message("plotting number of Cs per gene")
 f.plot.number.DMCs.per.gene(genes2xyzWithTEG, rDir, outPrefix)
-f.plot.number.DMCs.per.gene(genes2xyzWithoutTEG, rDir, paste0(outPrefix, "_withTEOR"))
+f.plot.number.DMCs.per.gene(genes2xyzWithoutTEG, rDir, paste0(outPrefix, "_withoutTEOR"))
 
 f.print.message("FINISHED")
