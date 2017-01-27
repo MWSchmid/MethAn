@@ -15,6 +15,52 @@
 ####### general things
 ###########################################################################################
 
+#' print or write a table
+#'@param dat a matrix or table
+#'@param rDir a directory where the results will be stored [can be NA or empty string to trigger printing to the console]
+#'@param outfile a file name
+#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}
+f.print.or.write.table <- function(dat, rDir = '', outfile = '') {
+  if (is.na(rDir) | nchar(rDir) == 0) {
+    cat(paste(colnames(dat), collapse = '\t')); cat('\n')
+    for (rn in rownames(dat)) {
+      cat(paste(c(rn, dat[rn,]), collapse = '\t')); cat('\n')
+    }
+  } else {
+    write.csv(dat, file.path(rDir, outfile), quote = FALSE)
+  }
+  invisible(NULL)
+}
+
+#' open a figure
+#'@param rDir a directory where the results will be stored [can be NA or empty string to trigger printing to the console]
+#'@param outfile a file name
+#'@param useSVG set to TRUE if you want SVG output
+#'@param ... forwarded to svg() or tiff()
+#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}
+f.open.figure <- function(rDir = '', outfile = '', useSVG = FALSE, ...) {
+  if (!(is.na(rDir) | nchar(rDir) == 0)) {
+    if (useSVG) {
+      svg(file.path(rDir, outfile), ...)
+    } else {
+      tiff(file.path(rDir, outfile), compression = "lzw", ...)
+    }
+  }
+  invisible(NULL)
+}
+
+#' close a png/pdf/tiff/svg figure
+#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}
+f.close.figure <- function() {
+  curDev <- names(dev.cur())
+  if (curDev %in% c("pdf", "png", "tiff", "svg")) {
+    dev.off()
+  } else {
+    cat("Current device type (", curDev, ") will not be closed by f.close.figure.\n")
+  }
+  invisible(NULL)
+}
+
 #' Revert histogram data (vector)
 #'@note this function takes a vector of two entries
 #'1: the value (for example distance)
