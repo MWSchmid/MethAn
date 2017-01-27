@@ -815,7 +815,7 @@ f.plot.number.DMCs.per.gene <- function(genes2xyz, rDir, filePrefix = "", minima
   svgOutfile <- file.path(rDir, paste(filePrefix, "DMCs_per_gene.svg", sep = ''))
   pngOutfile <- file.path(rDir, paste(filePrefix, "DMCs_per_gene.png", sep = ''))
   svg(svgOutfile, height = 5, width = 5)
-  f.histogram(log2(gSum[gSum >= minimalNumber]), xName = "number of DMCs per gene (log2(x+1))", doNotShowSummary = TRUE, main = "", xlim = c(log2(minimalNumber), 7))
+  f.histogram(log2(gSum[gSum >= minimalNumber]), xName = "number of DMCs per gene (log2(x+1))", doNotShowSummary = TRUE, main = "", xlim = c(log2(minimalNumber), 12))
   dev.off()
   system(paste("rsvg-convert -a -d 300 -p 300 ", svgOutfile," > ", pngOutfile, sep = ''))
   write.table(cbind(names(gSum), gSum), file.path(rDir, paste0(filePrefix, "_DMCs_per_gene.txt")), quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
@@ -837,7 +837,7 @@ f.get.distances.between <- function(dmcTable) {
   for (chr in unique(dmcTable$chrom)) {
     sub <- subset(dmcTable, chrom == chr)
     num <- nrow(sub)
-    out <- c(out, log10(sub$pos[2:num] - sub$pos[1:(num-1)]))
+    if (num >= 2) { out <- c(out, log10(sub$pos[2:num] - sub$pos[1:(num-1)])) }
   }
   return(out)
 }
@@ -891,6 +891,10 @@ f.draw.distance.between.randomCs <- function(dmcTable, allPositions, rDir, numRe
 #'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
 #'@export
 f.draw.distance.between.DMCs.combined.get.random.mean.sd <- function(dmcTable, allPositions, numRep) {
+  chromCounts <- table(allPositions$chrom)
+  chromsToKeep <- names(chromCounts)[chromCounts > 1]
+  dmcTable <- subset(dmcTable, chrom %in% chromsToKeep)
+  allPositions <- subset(allPositions, chrom %in% chromsToKeep)
   randomDMC <- dmcTable[,c("chrom", "pos")]
   randomDensities <- list()
   for (randomSetPrefix in paste("random", 1:numRep, sep = '_')) {
@@ -961,6 +965,7 @@ f.create.regions <- function(dmcTable, minNum, maxDist) {
   for (chr in chromosomes) {
     sub <- subset(dmcTable, chrom == chr)
     numPos <- nrow(sub)
+    if (numPos < minNum) { next }
     curStart <- sub$pos[1]
     curEnd <- sub$pos[1]
     curNum <- 1

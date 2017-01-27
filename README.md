@@ -375,3 +375,31 @@ for (ctxt in c("CG", "CHG", "CHH")) {
 }
 dev.off()
 ```
+
+
+
+## Wrapper
+
+** TODO add dependencies and descriptions
+
+```{SH}
+# make scripts executable and add to path
+sudo chmod +x MethAn/*.{sh,py,R}
+sudo cp MethAn/*.{sh,py,R} /usr/local/bin/
+sudo cp MethAn/MethAnMap/MethAnMap /usr/local/bin/
+
+# required files; for details: generateBasicDescription.sh --help
+myAnnotation="/path/to/an/Rcount/annotation.xml"
+allNucleotides="/path/to/a/file/with/all/tested/nucleotides.txt"     # see MethAnMap --help for the format
+selectedNucleotides="/path/to/a/file/with/selected/nucleotides.txt"  # see MethAnMap --help for the format
+outputDir="/path/to/a/folder/for/the/results"
+chromSizesFile=""
+gffFile=""
+TEfile=""
+species="At"
+logFile="/path/to/a/log/file.txt"
+generateBasicDescription.sh $outputDir $myAnnotation $allNucleotides $chromSizesFile $gffFile $TEfile $species &> $logfile
+```
+
+
+
