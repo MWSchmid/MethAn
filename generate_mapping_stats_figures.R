@@ -86,7 +86,8 @@ f.print.message("summarizing annotation")
 if (species == "At") {
   transposonOrRepeatTypes <- list(
     transposon = c("transposable_element", "transposable_element_gene"),
-    pseudogene = c("pseudogene") # yes - that's not a repeat or transposon :)
+    pseudogene = c("pseudogene"), # yes - that's not a repeat or transposon :)
+    miRNAgene = c("miRNA_primary_transcript") # this as well not
   )
 } else if (species == "Mp") {
   # ignore: rRNA, snRNA
@@ -115,7 +116,10 @@ if (species == "At") {
 }
 
 for (toMerge in names(transposonOrRepeatTypes)) {
-  if  (sum(transposonOrRepeatTypes[[toMerge]] %in% colnames(numPlots)) == 0) { next }
+  if  (sum(transposonOrRepeatTypes[[toMerge]] %in% colnames(numPlots)) == 0) {
+    f.print.message(paste0("INFO: skipping, ", toMerge))
+    next
+  }
   temp <- numPlots[,transposonOrRepeatTypes[[toMerge]]]
   if (is.vector(temp)) {
     numPlots[[toMerge]] <- temp
