@@ -69,7 +69,7 @@ Required input:
     * percent methylation
 * The annotation in Rcount-XML format:
     * can be generated with [Rcount-format](https://github.com/MWSchmid/Rcount).
-    * there is an annotation with 2 kb flanking regions [available here](data/Araport11_annotation_with_2kb_flank.xml.zip?raw=true). It was generated with a [reformatted Araport 11 GFF](data/Araport11_ref_noChr.gff.zip?raw=true) and is compatible with the TAIR10 reference assembly (just make sure that the chromosomes are named 1, 2, 3, 4, 5, Mt and Pt). The priorities for the annotation were set like shown [here](data/Araport11_annotation_with_2kb_flank.png). Finally, there is also a [TEGtoTEfile available here](data/TEGtoTE.txt.zip?raw=true) (see below for what it can be used).
+    * there is an annotation with 2 kb flanking regions [available here](data/Araport11_annotation_with_2kb_flank.xml.zip?raw=true). It was generated with a [reformatted Araport 11 GFF](data/Araport11_ref_noChr.gff.zip?raw=true) and is compatible with the TAIR10 reference assembly (just make sure that the chromosomes are named 1, 2, 3, 4, 5, Mt and Pt). The priorities for the annotation were set like shown [here](data/Araport11_annotation_with_2kb_flank.png). Finally, there is also a [TEGtoTEfile available here](data/TEGtoTE.txt?raw=true) (see below for what it can be used).
 
     
 Note that the mapping statistics will make use of the priorities set with Rcount-format. Note that priorities are compared to each other on all levels (i.e. exons should have a higher priority than "mRNA", "gene", "transposon" or alike)!
