@@ -9,6 +9,42 @@ Note:
 * MethAnMap, the binary for mapping positions to the annotation is an exception in this respect. It deals with any genome (as long as the annotation and the genome sequence match).
 * MethAnPre is as quite well generalized.
 
+Install dependencies:
+```SH
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install unzip build-essential zlibc zlib1g zlib1g-dev tabix \
+python-pip git python-dev libpng-dev libfreetype6-dev pkg-config gfortran \
+libopenblas-dev liblapack-dev qt5-default librsvg2-bin
+sudo pip install numpy
+sudo pip install matplotlib
+```
+
+Install R:
+```SH
+## add the repository to your software sources
+# sudo add-apt-repository "deb http://<MIRR>/bin/linux/ubuntu <VERS>/"
+# <VERS>: Ubuntu version (code name; e.g. "trusty" for Ubuntu 14.04)
+# <MIRR>: A mirror listed on https://cran.r-project.org/mirrors.html 
+sudo add-apt-repository "deb http://stat.ethz.ch/CRAN/bin/linux/ubuntu trusty/"
+
+## add the authentication key
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+
+## update the software package list
+sudo apt-get update
+
+## install R
+sudo apt-get install r-base r-base-dev r-cran-rjava
+```
+
+Install packages in R:
+```R
+source("https://bioconductor.org/biocLite.R")
+biocLite(c("qvalue", "plotrix", "gplots", "RColorBrewer", "MASS", "colorRamps"))
+```
+
+
 Clone the repo and make scripts executable:
 ```SH
 git clone https://github.com/MWSchmid/MethAn
@@ -380,7 +416,7 @@ dev.off()
 
 ## Wrapper
 
-** TODO add dependencies and descriptions
+** TODO add more desc
 
 ```{SH}
 # make scripts executable and add to path
@@ -388,15 +424,26 @@ sudo chmod +x MethAn/*.{sh,py,R}
 sudo cp MethAn/*.{sh,py,R} /usr/local/bin/
 sudo cp MethAn/MethAnMap/MethAnMap /usr/local/bin/
 
-# required files; for details: generateBasicDescription.sh --help
-myAnnotation="/path/to/an/Rcount/annotation.xml"
+# for details see:
+# generateBasicDescription.sh --help
+
+# below an example for Arabidopsis thaliana
+# annotations for TAIR10 are provided
+
+## unzip the annotation first
+gunzip "/path/to/MethAn/data/p502anno_both_flank_2000_noChr.xml.gz"
+
+## files related to the genome and species
+myAnnotation="/path/to/MethAn/data/p502anno_both_flank_2000_noChr.xml"
+chromSizesFile="/path/to/MethAn/data/AtChromSizes.txt"
+gffFile="/path/to/MethAn/data/TAIR10.v2.sorted.gff"
+TEfile="/path/to/MethAn/data/TEGtoTE.txt"
+species="At"
+
+## files related to your data
 allNucleotides="/path/to/a/file/with/all/tested/nucleotides.txt"     # see MethAnMap --help for the format
 selectedNucleotides="/path/to/a/file/with/selected/nucleotides.txt"  # see MethAnMap --help for the format
 outputDir="/path/to/a/folder/for/the/results"
-chromSizesFile=""
-gffFile=""
-TEfile=""
-species="At"
 logFile="/path/to/a/log/file.txt"
 generateBasicDescription.sh $outputDir $myAnnotation $allNucleotides $chromSizesFile $gffFile $TEfile $species &> $logfile
 ```
