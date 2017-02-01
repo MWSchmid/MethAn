@@ -430,7 +430,7 @@ sudo cp MethAn/MethAnMap/MethAnMap /usr/local/bin/
 # below an example for Arabidopsis thaliana
 # annotations for TAIR10 are provided
 
-## unzip the annotation first
+## unzip the annotation first (this is the original TAIR10)
 gunzip "/path/to/MethAn/data/p502anno_both_flank_2000_noChr.xml.gz"
 
 ## files related to the genome and species
