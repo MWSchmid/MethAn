@@ -74,7 +74,6 @@ for (ctxt in myContexts) {
 }
 numPlots <- as.data.frame(numPlots)
 
-### ARABIDOPSIS
 # numPlots$transposon <- numPlots$transposable_element + numPlots$transposable_element_gene
 # # rearrange manually for nice order and plot spider graphs (see colnames(numPlots))
 # numPlots <- numPlots[,c("intergenic", "transposon", "five_flank", "five_prime_UTR", "exon",
@@ -83,19 +82,38 @@ numPlots <- as.data.frame(numPlots)
 # labs <- c("Intergenic", "Transposon", "5'Upstream", "5'UTR", "Exon", "Intron",
 #           "3'UTR", "3'Downstream", "Pseudogene", "miRNA")
 
-### GENERIC
-# ignore: rRNA, snRNA
 f.print.message("summarizing annotation")
-colnames(numPlots) <- gsub("^transposable_element_or_repeat_", "", colnames(numPlots))
-transposonOrRepeatTypes <- list(
-  DNAtransp = grep("^DNA", colnames(numPlots), value = TRUE),
-  LTRtransp = grep("^LTR", colnames(numPlots), value = TRUE),
-  LINEtransp = grep("^LINE", colnames(numPlots), value = TRUE),
-  SINEtransp = grep("^SINE", colnames(numPlots), value = TRUE),
-  RCtransp = grep("^RC", colnames(numPlots), value = TRUE),
-  repeats = c("Satellite", "Satellite_telomeric", "Simple_repeat")#,
-  #uknRepeats = c("unClassRep", "Unknown")
-)
+if (species == "At") {
+  transposonOrRepeatTypes <- list(
+    transposon = c("transposable_element", "transposable_element_gene"),
+    pseudogene = c("pseudogene") # yes - that's not a repeat or transposon :)
+  )
+} else if (species == "Mp") {
+  # ignore: rRNA, snRNA
+  colnames(numPlots) <- gsub("^transposable_element_or_repeat_", "", colnames(numPlots))
+  transposonOrRepeatTypes <- list(
+    DNAtransp = grep("^DNA", colnames(numPlots), value = TRUE),
+    LTRtransp = grep("^LTR", colnames(numPlots), value = TRUE),
+    LINEtransp = grep("^LINE", colnames(numPlots), value = TRUE),
+    SINEtransp = grep("^SINE", colnames(numPlots), value = TRUE),
+    RCtransp = grep("^RC", colnames(numPlots), value = TRUE),
+    repeats = c("Satellite", "Satellite_telomeric", "Simple_repeat")#,
+    #uknRepeats = c("unClassRep", "Unknown")
+  )
+} else {
+  f.print.message("WARNING: THE SPECIES YOU SPECIFIED DOES NOT HAVE A DEFAULT - using Mp")
+  colnames(numPlots) <- gsub("^transposable_element_or_repeat_", "", colnames(numPlots))
+  transposonOrRepeatTypes <- list(
+    DNAtransp = grep("^DNA", colnames(numPlots), value = TRUE),
+    LTRtransp = grep("^LTR", colnames(numPlots), value = TRUE),
+    LINEtransp = grep("^LINE", colnames(numPlots), value = TRUE),
+    SINEtransp = grep("^SINE", colnames(numPlots), value = TRUE),
+    RCtransp = grep("^RC", colnames(numPlots), value = TRUE),
+    repeats = c("Satellite", "Satellite_telomeric", "Simple_repeat")#,
+    #uknRepeats = c("unClassRep", "Unknown")
+  )
+}
+
 for (toMerge in names(transposonOrRepeatTypes)) {
   if  (sum(transposonOrRepeatTypes[[toMerge]] %in% colnames(numPlots)) == 0) { next }
   temp <- numPlots[,transposonOrRepeatTypes[[toMerge]]]
@@ -105,6 +123,7 @@ for (toMerge in names(transposonOrRepeatTypes)) {
     numPlots[[toMerge]] <- apply(temp, 1, sum)
   }
 }
+
 # rearrange manually for nice order and plot spider graphs (see colnames(numPlots))
 TORPs <- names(transposonOrRepeatTypes)
 if (length(TORPs) > 1) {
