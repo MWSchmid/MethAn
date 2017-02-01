@@ -15,6 +15,8 @@
 ####### general things
 ###########################################################################################
 
+f.print.message <- function(x) { cat("=== ", format(Sys.time(), "%Y %b %d %X"), paste0("=== ", x,"\n")) }
+
 #' print or write a table
 #'@param dat a matrix or table
 #'@param rDir a directory where the results will be stored [can be NA or empty string to trigger printing to the console]
