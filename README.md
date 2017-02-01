@@ -9,17 +9,6 @@ Note:
 * MethAnMap, the binary for mapping positions to the annotation is an exception in this respect. It deals with any genome (as long as the annotation and the genome sequence match).
 * MethAnPre is as quite well generalized.
 
-Install dependencies:
-```SH
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install unzip build-essential zlibc zlib1g zlib1g-dev tabix \
-python-pip git python-dev libpng-dev libfreetype6-dev pkg-config gfortran \
-libopenblas-dev liblapack-dev qt5-default librsvg2-bin
-sudo pip install numpy
-sudo pip install matplotlib
-```
-
 Install R:
 ```SH
 ## add the repository to your software sources
@@ -42,6 +31,17 @@ Install packages in R:
 ```R
 source("https://bioconductor.org/biocLite.R")
 biocLite(c("qvalue", "plotrix", "gplots", "RColorBrewer", "MASS", "colorRamps"))
+```
+
+Install other dependencies (if you install them before R, some commands in R will use multiple threads - however, this does not go well together with mclapply used for running the linear models for each cytosine **TODO** test if installing afterwards is really ok):
+```SH
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install unzip build-essential zlibc zlib1g zlib1g-dev tabix \
+python-pip git python-dev libpng-dev libfreetype6-dev pkg-config gfortran \
+libopenblas-dev liblapack-dev qt5-default librsvg2-bin
+sudo pip install numpy
+sudo pip install matplotlib
 ```
 
 Clone the repo and make scripts executable:
