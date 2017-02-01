@@ -44,7 +44,6 @@ source("https://bioconductor.org/biocLite.R")
 biocLite(c("qvalue", "plotrix", "gplots", "RColorBrewer", "MASS", "colorRamps"))
 ```
 
-
 Clone the repo and make scripts executable:
 ```SH
 git clone https://github.com/MWSchmid/MethAn
@@ -56,9 +55,9 @@ sudo chmod +x MethAn/*.{sh,py}
 
 A separate documentation for the preprocessing scripts can be found [here](README_MethAnPre.md).
 
-## MethAnMap
+## MethAnMap/MethAnDirectMap
 
-MethAnMap annotates cytosine positions to the annotation. A binary built on Kubuntu 16.04 is in the repository or can be downloaded [here](MethAnMap/MethAnMap?raw=true). Below some examples.
+MethAnMap/MethAnDirectMap annotates cytosine positions to the annotation. Binaries built on Kubuntu 16.04 are available ([MethAnMap](MethAnMap/MethAnMap?raw=true), [MethAnDirectMap](MethAnDirectMap/MethAnDirectMap?raw=true)). Below some examples.
 
 Required input:
 * A table with nucleotide positions with the follwing first five columns (no header):
@@ -91,8 +90,9 @@ myMapStats="/path/to/a/file/with/the/mapping/nucleotides.stats"
 
 ### Examples ###
 
-# Map all cytosines in the file
+# Map all cytosines in the file (this can be done with MethAnDirectMap and requires far less RAM)
 MethAnMap -S ${myNucleotides} -A ${myAnnotation} -O ${myMappedNucleotides} > ${myMapStats}
+MethAnDirectMap -S ${myNucleotides} -A ${myAnnotation} -O ${myMappedNucleotides} > ${myMapStats}
 
 # Map all cytosines with a coverage of at least 10
 MethAnMap -m 10 -S ${myNucleotides} -A ${myAnnotation} -O ${myMappedNucleotides} > ${myMapStats}
@@ -120,11 +120,12 @@ In case you would like to build MethAnMap:
 # Get the MethAn and Rcount repositories
 git clone https://github.com/MWSchmid/Rcount
 git clone https://github.com/MWSchmid/MethAn
+git clone https://github.com/MWSchmid/MethAn
 
-# Open MethAnMap.pro with QtCreator and build the program
+# Open MethAnMap.pro/MethAnDirectMap.pro with QtCreator and build the program
 
 # The binary was built on Kubuntu 16.04 and using it on
-# (K)ubuntu 14.04 will probably give an error like:
+# (K)ubuntu 14.04 may give an error like:
 # version 'GLIBCXX_3.4.21'' not found
 # To check what you have:
 strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBC
@@ -423,6 +424,7 @@ dev.off()
 sudo chmod +x MethAn/*.{sh,py,R}
 sudo cp MethAn/*.{sh,py,R} /usr/local/bin/
 sudo cp MethAn/MethAnMap/MethAnMap /usr/local/bin/
+sudo cp MethAn/MethAnDirectMap/MethAnDirectMap /usr/local/bin/
 
 # for details see:
 # generateBasicDescription.sh --help
@@ -441,8 +443,8 @@ TEfile="/path/to/MethAn/data/TEGtoTE.txt"
 species="At"
 
 ## files related to your data
-allNucleotides="/path/to/a/file/with/all/tested/nucleotides.txt"     # see MethAnMap --help for the format
-selectedNucleotides="/path/to/a/file/with/selected/nucleotides.txt"  # see MethAnMap --help for the format
+allNucleotides="/path/to/a/file/with/all/tested/nucleotides.txt"     # see MethAnDirectMap --help for the format
+selectedNucleotides="/path/to/a/file/with/selected/nucleotides.txt"  # see MethAnDirectMap --help for the format
 outputDir="/path/to/a/folder/for/the/results"
 logFile="/path/to/a/log/file.txt"
 generateBasicDescription.sh $outputDir $myAnnotation $allNucleotides $chromSizesFile $gffFile $TEfile $species &> $logfile

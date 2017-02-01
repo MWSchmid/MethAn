@@ -197,7 +197,7 @@ species=$1
 echo "=== ${me}: Starting at `date '+%Y-%m-%d %H:%M:%S'`"
 
 # check if the required programs are around
-require_command MethAnMap
+require_command MethAnDirectMap
 require_command makeMappingFiles.py
 require_command plot_generic_gene_anyOrganism.py
 require_command generate_overview.R
@@ -225,12 +225,12 @@ g2gf="${outputDir}/g2gf.txt"
 g2num="${outputDir}/g2num.txt"
 
 # Map all cytosines in the files and check output
-command="MethAnMap -S ${allNucleotides} -A ${annotation} -O ${allMappedNucleotides} > ${allMapStats}"
+command="MethAnDirectMap -S ${allNucleotides} -A ${annotation} -O ${allMappedNucleotides} > ${allMapStats}"
 echo "=== ${me}: Running: ${command}"
 eval $command
 rc=$?
 echo "=== ${me}: Command ended with exit code $rc"
-command="MethAnMap -S ${selectedNucleotides} -A ${annotation} -O ${selectedMappedNucleotides} > ${selectedMapStats}"
+command="MethAnDirectMap -S ${selectedNucleotides} -A ${annotation} -O ${selectedMappedNucleotides} > ${selectedMapStats}"
 echo "=== ${me}: Running: ${command}"
 eval $command
 rc=$?
