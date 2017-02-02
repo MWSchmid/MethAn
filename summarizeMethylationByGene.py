@@ -49,6 +49,26 @@ class nucCounter:
             except KeyError:
                 self.children[curLevel] = nucCounter(self.name, hierarchy, totCov, mePerc)
 
+class nucCounterAlternative:
+    
+    def __init__(self, name, feature, context, totCov, mePerc):
+        self.name = name
+        self.featureAndContext = {}
+        self.addNucleotide(feature, context, totCov, mePerc)
+    
+    def __str__(self):
+        out = ['\t'.join([self.name, featureContextPair, str(vals[0]), str(vals[1]/vals[0]), str(vals[2]/vals[0])]) for featureContextPair, vals in self.featureAndContext.items()]
+        return '\n'.join(out)
+   
+    def addNucleotide(self, feature, context, totCov, mePerc):
+        featureContextPair = '\t'.join([feature, context])
+        try:
+            self.featureAndContext[featureContextPair][0] += 1
+            self.featureAndContext[featureContextPair][1] += totCov
+            self.featureAndContext[featureContextPair][2] += mePerc
+        except KeyError:
+            self.featureAndContext[featureContextPair] = [1, totCov, mePerc]
+
 def summarizeByGene(mappedNucleotides):
     geneDict = {}
     with open(mappedNucleotides, 'rb') as infile:
@@ -66,11 +86,14 @@ def summarizeByGene(mappedNucleotides):
                 if curGeneName == "none":
                     continue
                 try:
-                    geneDict[curGeneName].addNucleotide(["topLevel", curGeneFeature, ctxt], totCov, mePerc)
+                    #geneDict[curGeneName].addNucleotide(["topLevel", curGeneFeature, ctxt], totCov, mePerc)
+                    geneDict[curGeneName].addNucleotide(curGeneFeature, ctxt, totCov, mePerc)
                 except KeyError:
-                    geneDict[curGeneName] = nucCounter(curGeneName, ["topLevel", curGeneFeature, ctxt], totCov, mePerc)
-    for curGeneName, curGeneName in geneDict.items():
-        sys.stdout.write(str(curGeneName) + '\n')
+                    #geneDict[curGeneName] = nucCounter(curGeneName, ["topLevel", curGeneFeature, ctxt], totCov, mePerc)
+                    geneDict[curGeneName] = nucCounterAlternative(curGeneName, curGeneFeature, ctxt, totCov, mePerc)
+                    
+    for curGeneName, curGeneItem in geneDict.items():
+        sys.stdout.write(str(curGeneItem) + '\n')
 
 if __name__ == '__main__':
 
