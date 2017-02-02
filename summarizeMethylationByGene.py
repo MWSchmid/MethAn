@@ -24,7 +24,7 @@ class nucCounter:
     
     def __init__(self, name, hierarchy, totCov, mePerc):
         self.name = name
-        self.feature = hierarchy.pop(0)
+        self.feature = ""
         (self.num, self.cov, self.met) = (0, 0, 0)
         self.children = {}
         self.addNucleotide(hierarchy, totCov, mePerc)
@@ -35,11 +35,12 @@ class nucCounter:
         return out
    
     def addNucleotide(self, hierarchy, totCov, mePerc):
+        self.feature = hierarchy.pop(0)
         self.num += 1
         self.cov += totCov
         self.met += mePerc
         if len(hierarchy) > 0:
-            curLevel = hierarchy.pop()
+            curLevel = hierarchy[0]
             try:
                 self.children[curLevel].addNucleotide(hierarchy, totCov, mePerc)
             except KeyError:
@@ -57,7 +58,7 @@ def summarizeByGene(mappedNucleotides):
             if totCov == 0:
                 continue
             mePerc = (meCov/totCov)*100
-            allGenes = list(set([x.split(',') for x in mapping.split('|')]))
+            allGenes = [x.split(',') for x in mapping.split('|')]
             for curGeneName,curGeneFeature in allGenes:
                 if curGeneName == "none":
                     continue
@@ -84,7 +85,7 @@ if __name__ == '__main__':
     parser.add_argument("-v", "--version", action="version",
                         version='%(prog)s {0}'.format(__version__))
     
-    parser.add_argument("mappedNucleotides", nargs='+', type=str,
+    parser.add_argument("mappedNucleotides", type=str,
                         help="""
                         A file with mapped nucleotides. Output from
                         MethAnMap or MethAnDirectMap.
@@ -92,4 +93,4 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     
-    summarizeByGene(mappedNucleotides)
+    summarizeByGene(args.mappedNucleotides)
