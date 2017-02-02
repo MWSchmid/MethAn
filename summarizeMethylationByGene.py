@@ -48,23 +48,23 @@ class nucCounter:
 def summarizeByGene(mappedNucleotides):
     geneDict = {}
     with open(mappedNucleotides, 'rb') as infile:
-        line = infile.readline().decode("ascii")
-        fields = line.rstrip('\n').split('\t')
-        (chrom, strand, pos, umeCov, meCov, ctxt, mapping) = fields[:7]
-        umeCov = int(umeCov)
-        meCov = int(meCov)
-        totCov = umeCov+meCov
-        if totCov == 0:
-            continue
-        mePerc = (meCov/totCov)*100
-        allGenes = list(set([x.split(',') for x in mapping.split('|')]))
-        for curGeneName,curGeneFeature in allGenes:
-            if curGeneName == "none":
+        for line in infile:
+            fields = line.decode("ascii").rstrip('\n').split('\t')
+            (chrom, strand, pos, umeCov, meCov, ctxt, mapping) = fields[:7]
+            umeCov = int(umeCov)
+            meCov = int(meCov)
+            totCov = umeCov+meCov
+            if totCov == 0:
                 continue
-            try:
-                geneDict[curGeneName].addNucleotide(["topLevel", curGeneFeature, ctxt], totCov, mePerc)
-            except KeyError:
-                geneDict[curGeneName] = nucCounter(curGeneName, ["topLevel", curGeneFeature, ctxt], totCov, mePerc)
+            mePerc = (meCov/totCov)*100
+            allGenes = list(set([x.split(',') for x in mapping.split('|')]))
+            for curGeneName,curGeneFeature in allGenes:
+                if curGeneName == "none":
+                    continue
+                try:
+                    geneDict[curGeneName].addNucleotide(["topLevel", curGeneFeature, ctxt], totCov, mePerc)
+                except KeyError:
+                    geneDict[curGeneName] = nucCounter(curGeneName, ["topLevel", curGeneFeature, ctxt], totCov, mePerc)
     for curGeneName, curGeneName in geneDict.items():
         sys.stdout.write(str(curGeneName) + '\n')
 
