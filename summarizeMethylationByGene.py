@@ -30,9 +30,12 @@ class nucCounter:
         self.addNucleotide(hierarchy, totCov, mePerc)
     
     def __str__(self):
-        out = '\n'.join([str(child) for child in self.children])
-        out += '\n' + '\t'.join([self.name, self.feature, str(self.num), str(self.cov), str(self.met/self.num)])
-        return out
+        out = [str(self.children[child])+'\t'+self.feature for child in self.children]
+        if self.feature == "topLevel":
+            out.append('\t'.join([self.name, self.feature, str(self.num), str(self.cov), str(self.met/self.num), "self"]))
+        else:
+            out.append('\t'.join([self.name, self.feature, str(self.num), str(self.cov), str(self.met/self.num)]))
+        return '\n'.join(out)
    
     def addNucleotide(self, hierarchy, totCov, mePerc):
         self.feature = hierarchy.pop(0)
