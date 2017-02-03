@@ -74,13 +74,13 @@ def summarizeByGene(mappedNucleotides):
     with open(mappedNucleotides, 'rb') as infile:
         for line in infile:
             fields = line.decode("ascii").rstrip('\n').split('\t')
-            (chrom, strand, pos, umeCov, meCov, ctxt, mapping) = fields[:7]
+            (chrom, strand, pos, meCov, umeCov, ctxt, mapping) = fields[:7]
             umeCov = int(umeCov)
             meCov = int(meCov)
             totCov = umeCov+meCov
             if totCov == 0:
                 continue
-            mePerc = (meCov/totCov)*100
+            mePerc = (meCov/float(totCov))*100 # the float is a python 2 safety
             allGenes = [x.split(',') for x in mapping.split('|')]
             for curGeneName,curGeneFeature in allGenes:
                 if curGeneName == "none":
