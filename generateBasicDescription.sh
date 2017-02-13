@@ -20,6 +20,7 @@
 #
 
 me=$(basename "$0")
+meDir=$(dirname "$0")
 
 ## defaults
 outputDir=""
@@ -210,7 +211,7 @@ input_exists ${selectedNucleotides}
 input_exists ${chromFile} 
 input_exists ${gffFile} 
 input_exists ${TEfile} 
-input_exists "MethAnR.R"
+input_exists "${meDir}/MethAnR.R"
 
 # create output directory
 mkdir -p ${outputDir}
