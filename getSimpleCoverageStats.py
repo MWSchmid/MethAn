@@ -54,14 +54,19 @@ class coverageInfo():
         self.count[ctxt] += 1
         if totCov <= 5:
             self.lowCount[ctxt] += 1
+        meCov = math.floor(totCov*(pCentMeth/100.0))
         self.totCovSum[ctxt] += totCov
-        self.meCovSum[ctxt] += math.floor(totCov*(pCentMeth/100.0))
-        self.unCovSum[ctxt] += totCov-self.meCovSum[ctxt]
+        self.meCovSum[ctxt] += meCov
+        self.unCovSum[ctxt] += totCov-meCov
 
 def getCoverageStats(fileName):
     stats = {}
+    lineCounter = 0
     with open(fileName, "rb") as infile:
         for line in infile:
+            lineCounter += 1
+            if (lineCounter % 1000000) == 0:
+                logging.info("Processed {0} million lines.".format(lineCounter/1000000))
             fields = line.decode("ascii").rstrip('\n').split('\t')
             chrom = fields[0]
             ctxt = fields[2]
