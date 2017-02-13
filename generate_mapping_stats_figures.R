@@ -93,7 +93,6 @@ if (species == "At") {
     miRNAgene = c("miRNA_primary_transcript") # this as well not
   )
 } else if (species == "Mp") {
-  # ignore: rRNA, snRNA
   colnames(numPlots) <- gsub("^transposable_element_or_repeat_", "", colnames(numPlots))
   transposonOrRepeatTypes <- list(
     DNAtransp = grep("^DNA", colnames(numPlots), value = TRUE),
@@ -101,8 +100,9 @@ if (species == "At") {
     LINEtransp = grep("^LINE", colnames(numPlots), value = TRUE),
     SINEtransp = grep("^SINE", colnames(numPlots), value = TRUE),
     RCtransp = grep("^RC", colnames(numPlots), value = TRUE),
-    repeats = c("Satellite", "Satellite_telomeric", "Simple_repeat")#,
-    #uknRepeats = c("unClassRep", "Unknown")
+    repeats = c("Satellite", "Satellite_telomeric", "Simple_repeat", "rRNA", "snRNA"),
+    #intergenic = c("intergenic", "unClassRep", "Unknown") # add the unclassified repeats and the unknown repeats to intergenic
+    uknRepeats = c("unClassRep", "Unknown") # or make a separate class of unknown and unclassified repeats
   )
 } else {
   f.print.message("WARNING: THE SPECIES YOU SPECIFIED DOES NOT HAVE A DEFAULT - using Mp")
@@ -113,8 +113,9 @@ if (species == "At") {
     LINEtransp = grep("^LINE", colnames(numPlots), value = TRUE),
     SINEtransp = grep("^SINE", colnames(numPlots), value = TRUE),
     RCtransp = grep("^RC", colnames(numPlots), value = TRUE),
-    repeats = c("Satellite", "Satellite_telomeric", "Simple_repeat")#,
-    #uknRepeats = c("unClassRep", "Unknown")
+    repeats = c("Satellite", "Satellite_telomeric", "Simple_repeat", "rRNA", "snRNA"),
+    #intergenic = c("intergenic", "unClassRep", "Unknown") # add the unclassified repeats and the unknown repeats to intergenic
+    uknRepeats = c("unClassRep", "Unknown") # or make a separate class of unknown and unclassified repeats
   )
 }
 
