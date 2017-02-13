@@ -36,17 +36,17 @@ class coverageInfo():
     def __init__(self, chrom, ctxt, totCov, pCentMeth):
         self.chrom = chrom
         self.anyContext = ["CpG", "CG", "CHG", "CHH"]
-        self.count = [dict(x, 0) for x in self.anyContext]
-        self.lowCount = [dict(x, 0) for x in self.anyContext]
-        self.totCovSum = [dict(x, 0) for x in self.anyContext]
-        self.meCovSum = [dict(x, 0) for x in self.anyContext]
-        self.unCovSum = [dict(x, 0) for x in self.anyContext]
+        self.count = dict([(x, 0) for x in self.anyContext])
+        self.lowCount = dict([(x, 0) for x in self.anyContext])
+        self.totCovSum = dict([(x, 0) for x in self.anyContext])
+        self.meCovSum = dict([(x, 0) for x in self.anyContext])
+        self.unCovSum = dict([(x, 0) for x in self.anyContext])
         self.addValue(ctxt, totCov, pCentMeth)
     
     def __str__(self):
         outLines = []
         for ctxt in self.anyContext:
-            outLines.append('\t'.join([self.chrom, ctxt, str(self.count[ctxt]]), str(self.lowCount[ctxt]]), str(self.totCovSum[ctxt]), str(self.meCovSum[ctxt]), str(self.unCovSum[ctxt])))
+            outLines.append('\t'.join([self.chrom, ctxt, str(self.count[ctxt]), str(self.lowCount[ctxt]), str(self.totCovSum[ctxt]), str(self.meCovSum[ctxt]), str(self.unCovSum[ctxt])]))
         out = '\n'.join(outLines)
         return out
     
