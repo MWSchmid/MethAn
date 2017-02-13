@@ -120,11 +120,12 @@ if (species == "At") {
 }
 
 for (toMerge in names(transposonOrRepeatTypes)) {
-  if  (sum(transposonOrRepeatTypes[[toMerge]] %in% colnames(numPlots)) == 0) {
+  presentForMerging <- transposonOrRepeatTypes[[toMerge]][transposonOrRepeatTypes[[toMerge]] %in% colnames(numPlots)]
+  if  (length(presentForMerging) == 0) {
     f.print.message(paste0("INFO: skipping, ", toMerge))
     next
   }
-  temp <- numPlots[,transposonOrRepeatTypes[[toMerge]]]
+  temp <- numPlots[,presentForMerging]
   if (is.vector(temp)) {
     numPlots[[toMerge]] <- temp
   } else {
