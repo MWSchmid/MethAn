@@ -50,7 +50,7 @@ class coverageInfo():
         out = '\n'.join(outLines)
         return out
     
-    def addValue(ctxt, totCov, pCentMeth):
+    def addValue(self, ctxt, totCov, pCentMeth):
         self.count[ctxt] += 1
         if totCov <= 5:
             self.lowCount[ctxt] += 1
