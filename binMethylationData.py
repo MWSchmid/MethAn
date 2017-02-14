@@ -112,6 +112,9 @@ if __name__ == '__main__':
                 context
                 percent methylated
             
+            IMPORTANT: THE LAST BINS MAY FALL OFF THE REFERENCE (the script does
+            not know about the size of the chromosome).
+            
             The results are printed to stdout.
             """))
 
