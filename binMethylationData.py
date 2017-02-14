@@ -63,7 +63,12 @@ class methBin():
         self.meth[ctxt] += percMeth
         return True
 
-def binMethylationData(fileName, minCov, binSize):
+def binMethylationData(fileName, chromSizesFile, minCov, binSize):
+    chromSizes = {}
+    with open(chromSizesFile, 'rb') as infile:
+        for line in infile:
+            (chrom, size) = line.decode("ascii").rstrip('\n').split('\t')
+            chromSizes[chrom] = int(size)
     curBin = methBin("none", 0, 0)
     lineCounter = 0
     with open(fileName, "rb") as infile:
@@ -82,6 +87,8 @@ def binMethylationData(fileName, minCov, binSize):
             if curBin.tryToAddPosition(chrom, pos, ctxt, pCentMeth):
                 continue
             if curBin.hasValues():
+                if curBin.end > chromSizes[curBin.chrom]:
+                    curBin.end = chromSizes[curBin.chrom]
                 sys.stdout.write(str(curBin)+'\n')
             newStart = math.floor(pos/float(binSize))*binSize
             curBin = methBin(chrom, newStart, newStart+binSize)
@@ -112,9 +119,6 @@ if __name__ == '__main__':
                 context
                 percent methylated
             
-            IMPORTANT: THE LAST BINS MAY FALL OFF THE REFERENCE (the script does
-            not know about the size of the chromosome).
-            
             The results are printed to stdout.
             """))
 
@@ -124,6 +128,11 @@ if __name__ == '__main__':
     parser.add_argument("methFile", type=str,
                         help="""
                         A file with the methylation data.
+                        """)
+
+    parser.add_argument("chromSizes", type=str,
+                        help="""
+                        A file with chrom ids and size (tab-sep).
                         """)
 
     parser.add_argument("-c", "--minCov", type=int, required=False, default = 5,
@@ -138,5 +147,5 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     
-    binMethylationData(args.methFile, args.minCov, args.binSize)
+    binMethylationData(args.methFile, args.chromSizes, args.minCov, args.binSize)
 
