@@ -52,7 +52,7 @@ class coverageInfo():
     
     def addValue(self, ctxt, totCov, pCentMeth):
         self.count[ctxt] += 1
-        if totCov <= 5:
+        if totCov < 5:
             self.lowCount[ctxt] += 1
         meCov = math.floor(totCov*(pCentMeth/100.0))
         self.totCovSum[ctxt] += totCov
