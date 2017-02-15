@@ -4,6 +4,8 @@
 
 This script can be used to merge BED graphs produced by bismark_SE/PE.sh and bamToBedGraph.sh and a sample annotation file (see below) into a single long-format table (for lm() in R).
 
+NOTE: minCov >= 5 and minGroupCount >= 2 are hard-coded.
+
 sampleTable.csv has a header and contains the following columns:
 
 <required>
@@ -283,6 +285,8 @@ if __name__ == '__main__':
             Merge BED graphs produced by bismark_SE/PE.sh and
             bamToBedGraph.sh and a sample annotation file into
             a single long-format table (for lm() in R).
+            
+            NOTE: minCov >= 5 and minGroupCount >= 2 are hard-coded.
             ======================================================
             """),
         epilog=textwrap.dedent("""\
@@ -359,8 +363,6 @@ if __name__ == '__main__':
                         Describe the type of the bed file. Only MethAn_bismark
                         is currently implemented (default).
                         """)
-    
-    
     
     args = parser.parse_args()
 
