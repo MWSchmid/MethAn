@@ -38,6 +38,7 @@ class coverageInfo():
         self.anyContext = ["CpG", "CG", "CHG", "CHH"]
         self.count = dict([(x, 0) for x in self.anyContext])
         self.lowCount = dict([(x, 0) for x in self.anyContext])
+        self.highCount = dict([(x, 0) for x in self.anyContext])
         self.totCovSum = dict([(x, 0) for x in self.anyContext])
         self.meCovSum = dict([(x, 0) for x in self.anyContext])
         self.unCovSum = dict([(x, 0) for x in self.anyContext])
@@ -46,18 +47,21 @@ class coverageInfo():
     def __str__(self):
         outLines = []
         for ctxt in self.anyContext:
-            outLines.append('\t'.join([self.chrom, ctxt, str(self.count[ctxt]), str(self.lowCount[ctxt]), str(self.totCovSum[ctxt]), str(self.meCovSum[ctxt]), str(self.unCovSum[ctxt])]))
+            outLines.append('\t'.join([self.chrom, ctxt, str(self.lowCount[ctxt]+self.highCount[ctxt]+self.count[ctxt]), str(self.lowCount[ctxt]), str(self.highCount[ctxt]), str(self.count[ctxt]), str(self.totCovSum[ctxt]), str(self.meCovSum[ctxt]), str(self.unCovSum[ctxt])]))
         out = '\n'.join(outLines)
         return out
     
     def addValue(self, ctxt, totCov, pCentMeth):
-        self.count[ctxt] += 1
         if totCov < 5:
             self.lowCount[ctxt] += 1
-        meCov = math.floor(totCov*(pCentMeth/100.0))
-        self.totCovSum[ctxt] += totCov
-        self.meCovSum[ctxt] += meCov
-        self.unCovSum[ctxt] += totCov-meCov
+        else if totCov > 100:
+            self.highCount[ctxt] += 1
+        else:
+            self.count[ctxt] += 1
+            meCov = math.floor(totCov*(pCentMeth/100.0))
+            self.totCovSum[ctxt] += totCov
+            self.meCovSum[ctxt] += meCov
+            self.unCovSum[ctxt] += totCov-meCov
 
 def getCoverageStats(fileName):
     stats = {}
@@ -98,8 +102,10 @@ if __name__ == '__main__':
             Output columns are:
                 chrom
                 contect
-                counts
-                lowCounts
+                totalCounts
+                lowCounts (cov <5)
+                highCounts (cov >100)
+                okCounts
                 totCovSum
                 meCovSum
                 unCovSum
