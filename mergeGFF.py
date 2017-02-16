@@ -21,8 +21,9 @@ class genomeFeature:
     
     def __init__(self, line):
         (self.chrom, self.source, self.feature, self.start, self.end, self.score, self.strand, self.phase, self.rest) = line.rstrip('\n').split('\t')
-        self.restDict = dict([x.split('=') for x in self.rest.split(';')])
         self.start = int(self.start)
+        self.rest = self.rest.rstrip(';')
+        self.restDict = dict([x.split('=') for x in self.rest.split(';')])
         self.children = []
     
     def __str__(self):
@@ -36,6 +37,12 @@ class genomeFeature:
         for child in self.children:
             if child.addPotentialChild(toAdd):
                 return True
+        if not "ID" in self.restDict: # exons sometimes have no ID - and they won't have children as well
+            for okWithoutID in ["exon", "UTR", "CDS"]:
+                if okWithoutID in self.feature:
+                    return False
+            logging.warning("Expected an ID for this entry: " + str(self))
+            return False
         if toAdd.restDict["Parent"] == self.restDict["ID"]:
             self.children.append(toAdd)
             return True
@@ -84,7 +91,7 @@ if __name__ == '__main__':
             
             Features will NOT be merged!
             
-            The resulting GFF is printed to std::out.
+            The resulting GFF is printed to stdout.
             """))
 
     parser.add_argument("-v", "--version", action="version",
