@@ -32,17 +32,17 @@ class genomeFeature:
         return '\n'.join(outList)
     
     def addPotentialChild(self, toAdd):
-        if not "Parent" in toAdd.restDict.keys():
-            return False
-        for child in self.children:
-            if child.addPotentialChild(toAdd):
-                return True
-        if not "ID" in self.restDict: # exons sometimes have no ID - and they won't have children as well
+        if not "ID" in self.restDict.keys(): # exons sometimes have no ID - and they won't have children as well
             for okWithoutID in ["exon", "UTR", "CDS"]:
                 if okWithoutID in self.feature:
                     return False
             logging.warning("Expected an ID for this entry: " + str(self))
             return False
+        if not "Parent" in toAdd.restDict.keys():
+            return False
+        for child in self.children:
+            if child.addPotentialChild(toAdd):
+                return True
         if toAdd.restDict["Parent"] == self.restDict["ID"]:
             self.children.append(toAdd)
             return True
