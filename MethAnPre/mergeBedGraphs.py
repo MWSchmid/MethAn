@@ -4,7 +4,7 @@
 
 This script can be used to merge BED graphs produced by bismark_SE/PE.sh and bamToBedGraph.sh and a sample annotation file (see below) into a single long-format table (for lm() in R).
 
-NOTE: minCov >= 5 and minGroupCount >= 2 are hard-coded.
+NOTE: minCov >= 5, maxCov <= 100, and minGroupCount >= 2 are hard-coded.
 
 sampleTable.csv has a header and contains the following columns:
 
@@ -201,7 +201,7 @@ def mergeFiles(sampleTab, chrom, ctxt, outfileName, fileType="MethAn_bismark", i
         #mergedTabGrouped = mergedTab.groupby(by=["pos", "group"])
         #groupCounts = mergedTabGrouped.apply(lambda g: len(g))
         minGroupCount = 2
-        groupCounts = mergedTab.query("coverage>=5").groupby(by=["pos", "group"])["coverage"].size()
+        groupCounts = mergedTab.query("coverage>=5 & coverage<=100").groupby(by=["pos", "group"])["coverage"].size()
         posCounts = groupCounts[groupCounts>=minGroupCount].count(level="pos")
         okPositions = list(posCounts[posCounts == len(set(groups))].index)
         selectedPositions = mergedTab[mergedTab["pos"].isin(okPositions)]
@@ -209,12 +209,12 @@ def mergeFiles(sampleTab, chrom, ctxt, outfileName, fileType="MethAn_bismark", i
         # add the output - write the header in in case the file does not exist
         logging.info("Writing "+region)
         writeHeader = not os.path.isfile(outfileName)
-        selectedPositions.query("coverage>=5").to_csv(outfileName, header=writeHeader, sep='\t', index=False, mode='a')
+        selectedPositions.query("coverage>=5 & coverage<=100").to_csv(outfileName, header=writeHeader, sep='\t', index=False, mode='a')
         
-        # write also all positions that have a coverage of at least 5
+        # write also all positions that have a coverage of at least 5 and max 100
         outfileNameNoGroupFilter = outfileName+".noGroupFilter"
         writeHeader = not os.path.isfile(outfileNameNoGroupFilter)
-        mergedTab.query("coverage>=5").to_csv(outfileNameNoGroupFilter, header=writeHeader, sep='\t', index=False, mode='a')
+        mergedTab.query("coverage>=5 & coverage<=100").to_csv(outfileNameNoGroupFilter, header=writeHeader, sep='\t', index=False, mode='a')
         
     return True
 
@@ -286,7 +286,7 @@ if __name__ == '__main__':
             bamToBedGraph.sh and a sample annotation file into
             a single long-format table (for lm() in R).
             
-            NOTE: minCov >= 5 and minGroupCount >= 2 are hard-coded.
+            NOTE: minCov >= 5, maxCov <= 100, and minGroupCount >= 2 are hard-coded.
             ======================================================
             """),
         epilog=textwrap.dedent("""\
