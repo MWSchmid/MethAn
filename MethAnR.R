@@ -2,7 +2,7 @@
 #'@param
 #'@return
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 
 
@@ -21,7 +21,7 @@ f.print.message <- function(x) { cat("=== ", format(Sys.time(), "%Y %b %d %X"), 
 #'@param dat a matrix or table
 #'@param rDir a directory where the results will be stored [can be NA or empty string to trigger printing to the console]
 #'@param outfile a file name
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}
 f.print.or.write.table <- function(dat, rDir = '', outfile = '') {
   if (is.na(rDir) | nchar(rDir) == 0) {
     cat(paste(colnames(dat), collapse = '\t')); cat('\n')
@@ -39,7 +39,7 @@ f.print.or.write.table <- function(dat, rDir = '', outfile = '') {
 #'@param outfile a file name
 #'@param useSVG set to TRUE if you want SVG output
 #'@param ... forwarded to svg() or tiff()
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}
 f.open.figure <- function(rDir = '', outfile = '', useSVG = FALSE, ...) {
   if (!(is.na(rDir) | nchar(rDir) == 0)) {
     if (useSVG) {
@@ -52,7 +52,7 @@ f.open.figure <- function(rDir = '', outfile = '', useSVG = FALSE, ...) {
 }
 
 #' close a png/pdf/tiff/svg figure
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}
 f.close.figure <- function() {
   curDev <- names(dev.cur())
   if (curDev %in% c("pdf", "png", "tiff", "svg")) {
@@ -68,7 +68,7 @@ f.close.figure <- function() {
 #'1: the value (for example distance)
 #'2: the occurence of the value
 #'it will then return a vector that holds the value as many times as it occurs
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.reverse.histogram.data <- function(x) {
   return(rep(x[1], x[2]))
 }
@@ -78,7 +78,7 @@ f.reverse.histogram.data <- function(x) {
 #'1: the value (for example distance)
 #'2: the occurence of the value
 #'it will then return a vector that holds the value as many times as it occurs
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.reverse.histogram.data.matrix <- function(x) {
   return(unlist(apply(x, 1, f.reverse.histogram.data)))
 }
@@ -89,7 +89,7 @@ f.reverse.histogram.data.matrix <- function(x) {
 #'@param useFreq plot frequencies instead of densities
 #'@param doNotShowSummary omit printing mean/median/sd
 #'@param useLog log2-transform the data
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.histogram <- function(x, y = c(), xName = "", useFreq = FALSE, doNotShowSummary = FALSE, useLog = FALSE, ...) 
 {
@@ -135,7 +135,7 @@ f.histogram <- function(x, y = c(), xName = "", useFreq = FALSE, doNotShowSummar
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.genetodensity <- function(x,y) {
   require("MASS")
   est <- kde2d(x, y, n = 50) # needs MASS - calculates the two dimensional density
@@ -152,7 +152,7 @@ f.genetodensity <- function(x,y) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.genetodensitycolor <- function(x,y) {
   require("MASS")
   require("colorRamps")
@@ -189,7 +189,7 @@ f.genetodensitycolor <- function(x,y) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.yellowblueblack <- function(x) {
   #rg <- approx(c(0, 0.5, 1), c(1, 1/3, 0), n = x)$y
   #b <- approx(c(0, 0.5, 1), c(2/3, 2/3, 0), n = x)$y
@@ -199,7 +199,7 @@ f.yellowblueblack <- function(x) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.yellowblackblue <- function(x) {
   #rg <- approx(c(0, 1, 0.5), c(1, 1/3, 0), n = x)$y
   #b <- approx(c(0, 1, 0.5), c(2/3, 2/3, 0), n = x)$y
@@ -209,7 +209,7 @@ f.yellowblackblue <- function(x) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.yellowredblue <- function(x) {
   r <- approx(c(0, 0.5, 1), c(1, 1, 0), n = x)$y
   g <- approx(c(0, 0.5, 1), c(1, 0, 0), n = x)$y
@@ -218,7 +218,7 @@ f.yellowredblue <- function(x) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.yellowblack <- function(x) {
   rg <- approx(c(0, 1), c(1, 0), n = x)$y
   b <- approx(c(0, 1), c(0, 0), n = x)$y
@@ -226,7 +226,7 @@ f.yellowblack <- function(x) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.yellowredblack <- function(x) {
   r <- approx(c(0, 0.5, 1), c(1, 1, 0), n = x)$y
   g <- approx(c(0, 0.5, 1), c(1, 0, 0), n = x)$y
@@ -235,7 +235,7 @@ f.yellowredblack <- function(x) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.redwhiteblack <- function(x) {
   r <- approx(c(0, 0.5, 1), c(1, 1, 0), n = x)$y
   g <- approx(c(0, 0.5, 1), c(0, 1, 0), n = x)$y
@@ -244,37 +244,37 @@ f.redwhiteblack <- function(x) {
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.blackblueyellow <- function(x) {
   return(rev(f.yellowblueblack(x)))
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.blueblackyellow <- function(x) {
   return(rev(f.yellowblackblue(x)))
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.blueredyellow <- function(x) {
   return(rev(f.yellowredblue(x)))
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.blackyellow <- function(x) {
   return(rev(f.yellowblack(x)))
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.blackredyellow <- function(x) {
   return(rev(f.yellowredblack(x)))
 }
 
 #' undocumented internal function
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.blackwhitered <- function(x) {
   return(rev(f.redwhiteblack(x)))
 }
@@ -288,7 +288,7 @@ f.blackwhitered <- function(x) {
 #'@param rDir the directory in which the results will be stored
 #'@param outfile file name without path and extension (default is "posDensityAlongChromosomes")
 #'@return NULL
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.plot.pos.density <- function(dmcTable, rDir, outfile = "posDensityAlongChromosomes") {
   #centromeres <- list(Chr1 = 15088987/1e6, Chr2 = 3608426.5/1e6, Chr3 = 13591999.5/1e6, Chr4 = 3956518.5/1e6, Chr5 = 11742754.5/1e6)
@@ -321,7 +321,7 @@ f.plot.pos.density <- function(dmcTable, rDir, outfile = "posDensityAlongChromos
   }
   dev.off()
   system(paste0("rsvg-convert -a -d 300 -p 300 ", file.path(rDir, outfileSVG)," > ", file.path(rDir, outfilePNG)))
-  return(NULL)
+  invisible(NULL)
 }
 
 #' plot region density along the (Arabidopsis) genome
@@ -329,7 +329,7 @@ f.plot.pos.density <- function(dmcTable, rDir, outfile = "posDensityAlongChromos
 #'@param rDir the directory in which the results will be stored
 #'@param outfile file name without extension (default is "regionDensityAlongChromosomes")
 #'@return NULL
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.plot.region.density <- function(regTable, rDir, outfile = "regionDensityAlongChromosomes") {
   #centromeres <- list(Chr1 = 15088987/1e6, Chr2 = 3608426.5/1e6, Chr3 = 13591999.5/1e6, Chr4 = 3956518.5/1e6, Chr5 = 11742754.5/1e6)
@@ -377,7 +377,7 @@ f.plot.region.density <- function(regTable, rDir, outfile = "regionDensityAlongC
 #'@param curFile current file to be read (key;entry|entryA|entryB)
 #'@param singleCore use only one core
 #'@return list[[key]] <- c(entryA, entryB)
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.get.genes2xyz.via.files.helper <- function(curFile, singleCore = FALSE) {
   if (!singleCore) {require("parallel")}
   temp <- scan(curFile, what = "character")
@@ -399,16 +399,16 @@ f.get.genes2xyz.via.files.helper <- function(curFile, singleCore = FALSE) {
 #'@param singleCore use only one core
 #'@return genes2xyz list
 #'@seealso \code{\link{f.get.genes2xyz}} and \code{\link{f.get.transposons2xyz}}
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.get.genes2xyz.via.files <- function(gf2dmcFile, g2gfFile, g2numFile, singleCore = FALSE) {
   out <- list()
   out$dmc <- list()
   out$feature <- list()
-  out$dmc <- f.get.genes2xyz.via.files.helper(gf2dmcFile)
-  out$feature <- f.get.genes2xyz.via.files.helper(g2gfFile)
-  out$numDMC <- as.numeric(unlist(f.get.genes2xyz.via.files.helper(g2numFile)))
-  names(out$numDMC) <- names(f.get.genes2xyz.via.files.helper(g2numFile))
+  out$dmc <- f.get.genes2xyz.via.files.helper(gf2dmcFile, singleCore)
+  out$feature <- f.get.genes2xyz.via.files.helper(g2gfFile, singleCore)
+  out$numDMC <- as.numeric(unlist(f.get.genes2xyz.via.files.helper(g2numFile, singleCore)))
+  names(out$numDMC) <- names(f.get.genes2xyz.via.files.helper(g2numFile, singleCore))
   return(out)
 }
 
@@ -417,7 +417,7 @@ f.get.genes2xyz.via.files <- function(gf2dmcFile, g2gfFile, g2numFile, singleCor
 #'@param singleCore use only one core
 #'@return genes2xyz list
 #'@seealso \code{\link{f.get.genes2xyz.via.files}} and \code{\link{f.get.transposons2xyz}}
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.get.genes2xyz <- function(dmcTable, singleCore = FALSE) {
   if (!singleCore) {require("parallel")}
@@ -459,7 +459,7 @@ f.get.genes2xyz <- function(dmcTable, singleCore = FALSE) {
 #'@param genes2xyz a list with gene-ID to sth mappings (see \code{\link{f.get.genes2xyz}}, \code{\link{f.get.genes2xyz.via.files}})
 #'@param TEGtoTEmapFile tab separated file with two columns: TEG-AGI and TE-AGI
 #'@return genes2xyz without TEGs (transposable element genes)
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.remove.tegs.from.genes2xyz <- function(genes2xyz, TEGtoTEmapFile) {
   teg2te <- read.table(TEGtoTEmapFile, header = FALSE, row.names = NULL, sep = '\t', stringsAsFactors = FALSE)
@@ -477,7 +477,7 @@ f.remove.tegs.from.genes2xyz <- function(genes2xyz, TEGtoTEmapFile) {
 #'@param singleCore use only one core
 #'@return transposon2xyz list
 #'@seealso \code{\link{f.get.genes2xyz}} and \code{\link{f.get.genes2xyz.via.files}}
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.get.transposons2xyz <- function(dmcTable, singleCore = FALSE) {
   if (!singleCore) {require("parallel")}
@@ -526,7 +526,7 @@ f.get.transposons2xyz <- function(dmcTable, singleCore = FALSE) {
 #'@param summaryFunction function for summarization within bins
 #'@return NULL
 #'@note a distance file is named like this: <infilePrefix>_<feature>_<context>.txt
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.draw.distance.to.something <- function(inDir, rDir, feature, smooth = TRUE, outfilePrefix = "", infilePrefix = "", summaryFunction = sum) {
   svgOutfile <- file.path(rDir, paste0(outfilePrefix, "distance_to_", feature,".svg"))
@@ -557,11 +557,11 @@ f.draw.distance.to.something <- function(inDir, rDir, feature, smooth = TRUE, ou
   }
   dev.off()
   system(paste("rsvg-convert -a -d 300 -p 300 ", svgOutfile," > ", pngOutfile, sep = ''))
-  return(NULL)
+  invisible(NULL)
 }
 
 #' internal function for \code{\link{f.draw.distance.to.something.combined}}
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 f.draw.distance.to.something.get.random.mean.sd <- function(inDir, infilePrefix, feature, context, smooth = TRUE, summaryFunction = sum, numRep = 10, randomInDir = inDir) {
   # use unequal log steps (0.1 for 0 to 4 and then 0.2)
   #logSteps <- c(0, seq(1,2.8,by=0.2), seq(3,5,by=0.1))
@@ -620,7 +620,7 @@ f.draw.distance.to.something.get.random.mean.sd <- function(inDir, infilePrefix,
 #'@note a distance file is named like this: <infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'the randomized files must be: random_<number>_<infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'[_<gain/loss>] is optional (without it, it will assume "totalC")
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.draw.distance.to.something.combined <- function(inDir, rDir, feature, smooth = TRUE, outfilePrefix = "", infilePrefix = "",
                                                   summaryFunction = sum, numRep = 10, randomInDir = inDir) {
@@ -706,7 +706,7 @@ f.draw.distance.to.something.combined <- function(inDir, rDir, feature, smooth =
 #'@note a distance file is named like this: <infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'the randomized files must be: random_<number>_<infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'[_<gain/loss>] is optional (without it, it will assume "totalC")
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.draw.distance.to.something.boxplot <- function(inDir, rDir, feature, outfilePrefix = "boxplots_", infilePrefix = "", randomInDir = inDir) {
   contextColors <- data.frame(
@@ -747,7 +747,7 @@ f.draw.distance.to.something.boxplot <- function(inDir, rDir, feature, outfilePr
   boxplot(distance ~ group, data = toPlot, col = boxplotColors, pch = 16, cex = 0.5, las = 1, xaxs = "r", yaxs = "r", bty = "n", ylim = c(0, 5))
   dev.off()
   system(paste("rsvg-convert -a -d 300 -p 300 ", svgOutfile," > ", pngOutfile, sep = ''))
-  return(NULL)
+  invisible(NULL)
 }
 
 #' test distance to an annotation feature - random data - t-test
@@ -760,7 +760,7 @@ f.draw.distance.to.something.boxplot <- function(inDir, rDir, feature, outfilePr
 #'@note a distance file is named like this: <infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'the randomized files must be: random_<number>_<infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'[_<gain/loss>] is optional (without it, it will assume "totalC")
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.test.distance.to.something <- function(inDir, feature, infilePrefix = "", numRep = 10, randomInDir = inDir) {
   out <- list()
@@ -802,7 +802,7 @@ f.test.distance.to.something <- function(inDir, feature, infilePrefix = "", numR
 #'@note a distance file is named like this: <infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'the randomized files must be: random_<number>_<infilePrefix>_<feature>_<context>[_<gain/loss>].txt
 #'[_<gain/loss>] is optional (without it, it will assume "totalC")
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.test.distance.to.something.empirical <- function(inDir, feature, infilePrefix = "", numRep = 500, randomInDir = inDir) {
   cat("context == ALL will be skipped\n")
@@ -849,7 +849,7 @@ f.test.distance.to.something.empirical <- function(inDir, feature, infilePrefix 
 #'@param filePrefix a prefix for the file name (default is "")
 #'@param minimalNumber
 #'@return NULL
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.plot.number.DMCs.per.gene <- function(genes2xyz, rDir, filePrefix = "", minimalNumber = 1) {
   if ("numDMC" %in% names(genes2xyz)) {
@@ -867,7 +867,7 @@ f.plot.number.DMCs.per.gene <- function(genes2xyz, rDir, filePrefix = "", minima
   dev.off()
   system(paste("rsvg-convert -a -d 300 -p 300 ", svgOutfile," > ", pngOutfile, sep = ''))
   write.table(cbind(names(gSum), gSum), file.path(rDir, paste0(filePrefix, "_DMCs_per_gene.txt")), quote = FALSE, sep = "\t", row.names = FALSE, col.names = FALSE)
-  return(NULL)
+  invisible(NULL)
 }
 
 ###########################################################################################
@@ -878,7 +878,7 @@ f.plot.number.DMCs.per.gene <- function(genes2xyz, rDir, filePrefix = "", minima
 #'@param dmcTable a data frame with the positions ("chrom" and "pos" are required)
 #'@return a vector with all distances
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.get.distances.between <- function(dmcTable) {
   out <- c()
@@ -896,7 +896,7 @@ f.get.distances.between <- function(dmcTable) {
 #'@param filePrefix a prefix for the file name (default is "")
 #'@return NULL
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.draw.distance.between.DMCs <- function(dmcTable, rDir, filePrefix = "") {
   myDist <- f.get.distances.between(dmcTable)
@@ -906,7 +906,7 @@ f.draw.distance.between.DMCs <- function(dmcTable, rDir, filePrefix = "") {
   f.histogram(myDist, xName = "distance to next DMC (log10())", doNotShowSummary = TRUE, main = "", xlim=c(0,6))
   dev.off()
   system(paste("rsvg-convert -a -d 300 -p 300 ", svgOutfile," > ", pngOutfile, sep = ''))
-  return(NULL)
+  invisible(NULL)
 }
 
 #' Draw distances between RANDOM Cs
@@ -916,7 +916,7 @@ f.draw.distance.between.DMCs <- function(dmcTable, rDir, filePrefix = "") {
 #'@param numRep number of random samples
 #'@return NULL
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.draw.distance.between.randomCs <- function(dmcTable, allPositions, rDir, numRep) {
   randomDMC <- dmcTable[,c("chrom", "pos")]
@@ -936,7 +936,7 @@ f.draw.distance.between.randomCs <- function(dmcTable, allPositions, rDir, numRe
 #'@param numRep number of random samples
 #'@return matrix with random means and standard deviations
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.draw.distance.between.DMCs.combined.get.random.mean.sd <- function(dmcTable, allPositions, numRep) {
   chromCounts <- table(allPositions$chrom)
@@ -968,7 +968,7 @@ f.draw.distance.between.DMCs.combined.get.random.mean.sd <- function(dmcTable, a
 #'@param filePrefix a prefix for the file name (default is "")
 #'@return NULL
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.draw.distance.between.DMCs.combined <- function(dmcTable, allPositions, rDir, numRep, filePrefix = "") {
   DMCdistances <- f.get.distances.between(dmcTable)
@@ -988,7 +988,7 @@ f.draw.distance.between.DMCs.combined <- function(dmcTable, allPositions, rDir, 
   polygon(xPolygon, yPolygon, col="#00009925", border=NA)
   dev.off()
   system(paste("rsvg-convert -a -d 300 -p 300 ", svgOutfile," > ", pngOutfile, sep = ''))
-  return(NULL)
+  invisible(NULL)
 }
 
 ###########################################################################################
@@ -1000,7 +1000,7 @@ f.draw.distance.between.DMCs.combined <- function(dmcTable, allPositions, rDir, 
 #'@param minNum minimal number of positions within a region ("chrom", "start", "end", "size", "density", "numbers")
 #'@param maxDist maximal distance between two neighboring positions to be joined into a region
 #'@return a data frame with the regions
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.create.regions <- function(dmcTable, minNum, maxDist) {
   # could be optimized if necessary
@@ -1051,7 +1051,7 @@ f.create.regions <- function(dmcTable, minNum, maxDist) {
 #'@param regionTable a data frame with the regions (required are the columns "chrom", "start", "end")
 #'@return a boolean vector of the length nrow(dmcTable) [TRUE means the position is within]
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.extract.Cs.within.regions <- function(dmcTable, regionTable) {
   temp <- list()
@@ -1071,7 +1071,7 @@ f.extract.Cs.within.regions <- function(dmcTable, regionTable) {
 #'@param gap allow a gap between regions
 #'@return merged regions
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.join.overlapping.regions <- function(data, otherCols = c(), summaryFunction = mean, gap = 0) {
   data <- data[with(data, order(chrom, start, end)),]
@@ -1108,7 +1108,7 @@ f.join.overlapping.regions <- function(data, otherCols = c(), summaryFunction = 
 #'@param bySpacerDistances the maximal distance between two neighboring DMCs (a vector with several values to test)
 #'@param useLog draw log2(x+1) instead of counts
 #'@return a list with some matrices (number of regions, number DMCs within regions, DMC density)
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.analyze.regions <- function(dmcTable, rDir, filePrefix = "", bySpacerNucleotides = seq(5, 100, by = 5), bySpacerDistances = seq(10, 200, by = 10), useLog = FALSE) {
   dataTypes <- c("numberRegions", "withinRegions", "density")
@@ -1160,7 +1160,7 @@ f.analyze.regions <- function(dmcTable, rDir, filePrefix = "", bySpacerNucleotid
 #'@param numRep number of random samples
 #'@return NULL
 #'@note 
-#'@author Marc W. Schmid \email{marcschmid@@gmx.ch}.
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
 #'@export
 f.analyze.random.regions <- function(dmcTable, allPositions, rDir, numRep) {
   randomDMC <- dmcTable[,c("chrom", "pos")]
@@ -1172,6 +1172,170 @@ f.analyze.random.regions <- function(dmcTable, allPositions, rDir, numRep) {
     cat(paste("sampled ", randomSetPrefix, "\n", sep = ''))
     temp <- f.analyze.regions(randomDMC, rDir, randomSetPrefix)
   }
-  return(NULL)
+  invisible(NULL)
 }
 
+
+
+###########################################################################################
+####### specific stuff from a certain project
+###########################################################################################
+#' plot a pretty heatmap (pheatmap)
+#'@param dat table with values - columns starting with "meanWithin_" will be used
+#'@param rDir result directory (can be NA or "" - plots directly in R)
+#'@param outPrefix a prefix for the file name
+#'@param maxPos [5000] maximal number of rows to plot
+#'@param numCenters [1000] number of centroids to use in case there are too many positions
+#'If NA, there will be random sampling of <maxPos> rows.
+#'@param scaled [FALSE] tells if data is pre-scaled (different color)
+#'@return
+#'@note 
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
+#'@export
+f.plot.pheatmap <- function(dat, rDir='', outPrefix='', maxPos=5000, numCenters=1000, scaled=FALSE) {
+  require("pheatmap")
+  require("RColorBrewer")
+  # extract columns and simplify colnames
+  meanWithinCols <- grep("^meanWithin_", colnames(dat), value = TRUE)
+  if (length(meanWithinCols) > 0) {
+    dat <- dat[,meanWithinCols]
+    colnames(dat) <- gsub("^meanWithin_", "", meanWithinCols)
+  } else {
+    f.print.message(paste0("f.plot.pheatmap: using everything."))
+  }
+  # subset if too many positions
+  if (nrow(dat) > maxPos) {
+    if (is.na(numCenters)) { 
+      f.print.message(paste0("f.plot.pheatmap: using ", maxPos," sampled positions for the plot."))
+      dat <- dat[sample.int(nrow(dat), maxPos),]
+    } else {
+      if (numCenters > (maxPos/5)) { numCenters <- maxPos/5}
+      f.print.message(paste0("f.plot.pheatmap: using ", numCenters," kmeans centers for the plot."))
+      someClusters <- kmeans(dat, numCenters, iter.max=1000)
+      if (someClusters$ifault == 4) {
+        f.print.message(paste0("f.plot.pheatmap: Quick-TRANSfer warning detected, trying gc(), round() and more iterations."))
+        gc()
+        someClusters <- kmeans(round(dat, 2), numCenters, iter.max=5000)
+      }
+      if (someClusters$ifault == 4) {
+        f.print.message(paste0("f.plot.pheatmap: Quick-TRANSfer warning detected again. Trying other algorithm."))
+        someClusters <- kmeans(dat, numCenters, iter.max=1000, algorithm = "MacQueen")
+      }
+      dat <- someClusters$centers
+    }
+  }
+  colorsToUse <- f.blackredyellow(11)
+  if (scaled) { colorsToUse <- f.blueblackyellow(11) }
+  f.open.figure(rDir, paste0(outPrefix, "_heatmap.tiff"), FALSE, width = 1000, height = 1000, pointsize = 20)
+  pheatmap(dat,
+           color = colorsToUse,
+           kmeans_k = NA, scale = "none",
+           show_rownames = FALSE, show_colnames = TRUE,
+           cluster_rows = TRUE, cluster_cols = TRUE,
+           treeheight_row = 0, treeheight_col = 50,
+           clustering_distance_rows = "euclidean",
+           clustering_distance_cols = "correlation",
+           legend = TRUE
+           )
+  f.close.figure()
+  invisible(NULL)
+}
+
+
+
+#' plot gene/position clusters
+#'@param dat table with values
+#'@param samVec a vector with the column names which should be used
+#'@param colVec a vector with colors, named according to <samVec>
+#'@param rDir [NA] result directory (can be NA or "" - plots directly in R)
+#'@param outPrefix [NA] a prefix for the file name
+#'@param maxPos [10000] maximal number of rows to plot
+#'@param numCenters [1000] number of centroids to use in case there are too many positions
+#'@param clusterNumberRange [1:20] numbers of clusters to test Mclust(G=clusterNumberRange) - don't use more than 25 (image size)
+#'@return
+#'@note 
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
+#'@export
+f.plot.gene.or.position.clusters <- function(dat, samVec, colVec, rDir=NA, outPrefix="default", maxPos=1e4, numCenters=1e3, clusterNumberRange=1:20) {
+  require("cluster")
+  require("mclust")
+  dat <- dat[,samVec]
+  if (nrow(dat) > maxPos) {
+    f.print.message(paste0("f.plot.gene.or.position.clusters: using ", numCenters," kmeans centers for the plot."))
+    someClusters <- kmeans(dat, numCenters, iter.max=1000)
+    if (someClusters$ifault == 4) {
+      f.print.message(paste0("f.plot.gene.or.position.clusters: Quick-TRANSfer warning detected, trying gc(), round() and more iterations."))
+      gc()
+      someClusters <- kmeans(round(dat, 2), numCenters, iter.max=5000)
+    }
+    if (someClusters$ifault == 4) {
+      f.print.message(paste0("f.plot.gene.or.position.clusters: Quick-TRANSfer warning detected again. Trying other algorithm."))
+      someClusters <- kmeans(dat, numCenters, iter.max=1000, algorithm = "MacQueen")
+    }
+    save(someClusters, file = file.path(rDir, paste0(outPrefix, "_clusters_kMeans.Rdata")))
+    forFit <- someClusters$centers
+  } else {
+    f.print.message(paste0("f.plot.gene.or.position.clusters: using all data for the plot."))
+    someClusters <- NA
+    forFit <- dat
+  }
+  fit <- Mclust(forFit, G=clusterNumberRange)
+  save(fit, file = file.path(rDir, paste0(outPrefix, "_clusters_mclust.Rdata")))
+  print(summary(fit))
+  # figure
+  splitByCluster <- split(as.data.frame(fit$data), fit$classification)
+  toPlot <- lapply(splitByCluster, function(x) cbind(colMeans(x), apply(x,2,sd))) #/sqrt(nrow(x))
+  f.open.figure(rDir, paste0(outPrefix, "_clusters.tiff"), FALSE, width = 1500, height = 1500, pointsize = 20)
+  par(mfrow=c(5,5)) # no smart guessing
+  for (temp in toPlot) {
+    temp <- temp[samVec,]
+    plot(NA, type="n", bty="n", ylim=c(0,100), xlim=c(1, nrow(temp)), ylab="methylation (%)", xlab="tissues", las = 1)
+    lines(1:nrow(temp), temp[,1], lty="dotted", col="gray60")
+    points(1:nrow(temp), temp[,1], pch="---", cex=3, col=colVec[samVec])
+    sem <- cbind(1:nrow(temp), 1:nrow(temp), temp[,1]-temp[,2], temp[,1]+temp[,2], colVec[samVec])
+    apply(sem, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], lwd = 2))
+    apply(sem, 1, function(x) points(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], pch="-", cex=2))
+  }
+  f.close.figure()
+  invisible(NULL)
+}
+
+
+
+
+
+# some totally unrelated stuff - expand.grid should do the same...
+
+f.combine.recursive <- function(facList, index, combination, combinationList) {
+  if (index > length(facList)) {
+    combinationList[[length(combinationList)+1]] <- combination
+  } else {
+    for (facLevel in facList[[index]]) {
+      combinationList <- f.combine.recursive(facList, index+1, c(combination, facLevel), combinationList)
+    }
+  }
+  return(combinationList)
+}
+
+f.get.all.factor.combinations.from.list.of.factors <- function(facList) {
+  if (length(facList) < 2) {stop("that's pointless - there is only one factor")}
+  out <- f.combine.recursive(facList, 1, c(), list())
+  out <- do.call("rbind", out)
+  return(out)
+}
+
+f.get.all.factor.combinations.from.single.vector <- function(simpleVector) {
+  temp <- list()
+  for (i in 1:length(simpleVector)) {
+    temp[[i]] <- simpleVector
+    simpleVector[i] <- NA
+  }
+  out <- f.get.all.factor.combinations.from.list.of.factors(temp)
+  return(out)
+}
+
+f.plot.legend <- function(colorVec, colSetName = "") {
+  plot(rep(1, length(colorVec)), 1:length(colorVec), pch = 16, cex = 4, xlim = c(0.5, 3), ylim = c(0, length(colorVec)+1), col = colorVec,
+       xaxs="i", yaxs = 'i', xaxt="n", yaxt="n", type="p", xlab = '', ylab = '', main = colSetName)
+  text(rep(1.2, length(colorVec)), 1:length(colorVec), labels = names(colorVec), cex = 2, col = colorVec, adj = 0)
+}
