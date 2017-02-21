@@ -13,7 +13,7 @@ percent methylated (0..100)
 
 Output columns are:
 chrom
-contect
+context
 counts
 lowCounts
 totCovSum
@@ -101,7 +101,7 @@ if __name__ == '__main__':
             
             Output columns are:
                 chrom
-                contect
+                context
                 totalCounts
                 lowCounts (cov <5)
                 highCounts (cov >100)
