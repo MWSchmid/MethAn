@@ -119,14 +119,17 @@ done
 Merge BED graphs produced by bismark_SE/PE.sh and bamToBedGraph.sh and a sample annotation file into a single long-format table (for lm() in R). The format of the sample annotation table (taken from the mergeBedGraphs.py help):
 
 * <required columns>
+
     * sampleID
     * bedFile
     * group (should be the smallest grouping possible)
 
 * <optional columns>
+
     * other factors which will be used in the model later on
 
 * <example>
+
     * sampleID,bedFile,group,organ,sex
     * lm1,lm1.bed,liver_male,liver,male
     * lm2,lm2.bed,liver_male,liver,male
@@ -142,7 +145,8 @@ Merge BED graphs produced by bismark_SE/PE.sh and bamToBedGraph.sh and a sample 
     * hf3,hf3.bed,heart_female,heart,female
 
 * Notes:
-    * group = <organ>_<sex> (generally the most detailed grouping possible)
+
+    * group = [organ]_[sex] (generally the most detailed grouping possible)
     * the bed files do not have to contain the sampleID in their names, but you should provide the full path
 
 The example below assumes that you have three tables which are identical except for the file paths (different because of the three separate and different contexts):
@@ -152,6 +156,7 @@ The example below assumes that you have three tables which are identical except 
 * sampleTableForMerge_CHH.csv
 
 For each context (or chromosome and context if kept separate), the script will produce two files:
+
 * one only with positions having a coverage of at least 5 within at least two replicates per group (name as specified on the command line - e.g. merged_CpG.txt).
 * one only with positions having a coverage of at least 5 in any sample (name as specified on the command line plus ending ".noGroupFilter" - e.g. merged_CpG.txt.noGroupFilter)
 
