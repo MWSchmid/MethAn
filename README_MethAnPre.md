@@ -118,17 +118,17 @@ done
 
 Merge BED graphs produced by bismark_SE/PE.sh and bamToBedGraph.sh and a sample annotation file into a single long-format table (for lm() in R). The format of the sample annotation table (taken from the mergeBedGraphs.py help):
 
-* <required columns>
+* required columns:
 
     * sampleID
     * bedFile
     * group (should be the smallest grouping possible)
 
-* <optional columns>
+* optional columns:
 
     * other factors which will be used in the model later on
 
-* <example>
+* example:
 
     * sampleID,bedFile,group,organ,sex
     * lm1,lm1.bed,liver_male,liver,male
@@ -144,7 +144,7 @@ Merge BED graphs produced by bismark_SE/PE.sh and bamToBedGraph.sh and a sample 
     * hf2,hf2.bed,heart_female,heart,female
     * hf3,hf3.bed,heart_female,heart,female
 
-* Notes:
+* notes:
 
     * group = [organ]_[sex] (generally the most detailed grouping possible)
     * the bed files do not have to contain the sampleID in their names, but you should provide the full path
