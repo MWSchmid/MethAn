@@ -83,6 +83,25 @@ f.reverse.histogram.data.matrix <- function(x) {
   return(unlist(apply(x, 1, f.reverse.histogram.data)))
 }
 
+#' smooth occurences for histograms
+#'@param dat table with x (methylation) and y (occurence) values (first and second column).
+#'@param numBins number of bins used by the sliding window
+#'@return a table with new x and y values
+#'@note x of the bins will be the average of the original x, y will be the sum of the original x
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
+#'@export
+f.smooth.raw.hist.data <- function(dat, numBins = 5) {
+  startFrags <- seq(1, nrow(dat)-numBins+1, by = 1)
+  endFrags <- startFrags + numBins - 1 # minus one as it should be half open
+  seFrags <- cbind(startFrags, endFrags)
+  out <- data.frame(
+    bin = apply(seFrags, 1, function(x) mean(dat[x[1]:x[2],1])),
+    occ = apply(seFrags, 1, function(x) sum(dat[x[1]:x[2],2])),
+    stringsAsFactors = FALSE)
+  return(out)
+  
+}
+
 #' Draw a histogram (frequency or density)
 #'@param x values
 #'@param xName x-axis label
@@ -1150,6 +1169,9 @@ f.analyze.regions <- function(dmcTable, rDir, filePrefix = "", bySpacerNucleotid
   }
   dev.off()
   system(paste("rsvg-convert -a -d 300 -p 300 ", svgOutfile," > ", pngOutfile, sep = ''))
+  for (dataType in dataTypes) {
+    write.csv(out[[dataType]], file.path(rDir, paste0(filePrefix, "region_parameters_and_results_", dataType, ".csv")), quote = FALSE)
+  }
   return(out)
 }
 
@@ -1285,22 +1307,30 @@ f.plot.gene.or.position.clusters <- function(dat, samVec, colVec, rDir=NA, outPr
   # figure
   splitByCluster <- split(as.data.frame(fit$data), fit$classification)
   toPlot <- lapply(splitByCluster, function(x) cbind(colMeans(x), apply(x,2,sd))) #/sqrt(nrow(x))
-  f.open.figure(rDir, paste0(outPrefix, "_clusters.tiff"), FALSE, width = 1500, height = 1500, pointsize = 20)
+  #f.open.figure(rDir, paste0(outPrefix, "_clusters.tiff"), FALSE, width = 1500, height = 1500, pointsize = 20)
+  f.open.figure(rDir, paste0(outPrefix, "_clusters.svg"), TRUE, width = 20, height = 20)
   par(mfrow=c(5,5)) # no smart guessing
   for (temp in toPlot) {
     temp <- temp[samVec,]
     plot(NA, type="n", bty="n", ylim=c(0,100), xlim=c(1, nrow(temp)), ylab="methylation (%)", xlab="tissues", las = 1)
-    lines(1:nrow(temp), temp[,1], lty="dotted", col="gray60")
-    points(1:nrow(temp), temp[,1], pch="---", cex=3, col=colVec[samVec])
-    sem <- cbind(1:nrow(temp), 1:nrow(temp), temp[,1]-temp[,2], temp[,1]+temp[,2], colVec[samVec])
-    apply(sem, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], lwd = 2))
-    apply(sem, 1, function(x) points(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], pch="-", cex=2))
+    xPos <- 1:nrow(temp)
+    lines(xPos, temp[,1], lty="dotted", col="gray60")
+    #points(xPos, temp[,1], pch="---", cex=3, col=colVec[samVec])
+    meanTicks <- cbind(xPos-0.2, xPos+0.2, temp[,1], temp[,1], colVec[samVec])
+    apply(meanTicks, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
+    #sem <- cbind(1:nrow(temp), 1:nrow(temp), temp[,1]-temp[,2], temp[,1]+temp[,2], colVec[samVec])
+    #apply(sem, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], lwd = 2))
+    #apply(sem, 1, function(x) points(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], pch="-", cex=2))
+    semLines <- cbind(xPos, xPos, temp[,1]-temp[,2], temp[,1]+temp[,2], colVec[samVec])
+    apply(semLines, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
+    semTicksTop <- cbind(xPos-0.15, xPos+0.15, temp[,1]+temp[,2], temp[,1]+temp[,2], colVec[samVec])
+    apply(semTicksTop, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
+    semTicksBottom <- cbind(xPos-0.15, xPos+0.15, temp[,1]-temp[,2], temp[,1]-temp[,2], colVec[samVec])
+    apply(semTicksBottom, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
   }
   f.close.figure()
   invisible(NULL)
 }
-
-
 
 
 

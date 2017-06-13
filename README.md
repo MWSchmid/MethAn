@@ -417,7 +417,7 @@ dev.off()
 
 ## Wrapper
 
-** TODO add more desc
+**TODO: add more description.**
 
 ```{SH}
 # make scripts executable and add to path

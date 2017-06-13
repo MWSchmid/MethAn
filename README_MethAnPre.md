@@ -186,24 +186,21 @@ cat merged_*.txt.noGroupFilter | awk '{if (NR<2) {print} else {if ($1!="chrom") 
 awk -v PREF="forModels" 'BEGIN{LASTPOS=-1;LASTBIN=0;CUROUT=PREF"_split_"LASTBIN".txt"}{CURBIN=int((NR-1)/6000000);CURPOS=$2;if((CURBIN!=LASTBIN)&&(CURPOS!=LASTPOS)){CUROUT=PREF"_split_"CURBIN".txt";LASTBIN=CURBIN};LASTPOS=CURPOS;if(NR>1){print>CUROUT}}' merged.txt
 done
 
-# run the Rscript with the model (see below)
+# run the Rscript with the model (check the example R-script)
+NUMCORES=4 # the number of parallel processes
 for SPLITFILE in forModels_split_*; do
-Rscript myModel.R $SPLITFILE
+Rscript myModel.R $SPLITFILE $NUMCORES
 done
 
 # merge the output
 cat forModels_split_*.mod | awk '{if (NR<2) {print} else {if ($1!="chrom") {print|"sort -k1,1V -k2,2n"} else {next}}}' > modelResults.txt
-done
 
 # correct for multiple testing (FDR or Q-values, must be specified)
 Rscript adjustP.R modelResults.txt FDR
 Rscript adjustP.R modelResults.txt Q
 ```
 
-
-# Rscript for running a linear model on each cytosine
-
-**TODO**
+**TODO: add explanations for the myModel.R script**
 
 
 

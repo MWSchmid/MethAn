@@ -48,7 +48,6 @@ f.print.message("testing region parameters")
 res <- f.analyze.regions(myData, rDir, outPrefix, c(seq(5, 20, by = 5), seq(30, 100, by = 10)),
                          c(10,20,30,40,50,75,100,200,300), useLog = TRUE)
 
-
 ######################################################################################
 ## create regions with a given set of parameters
 ######################################################################################
