@@ -15,9 +15,11 @@ if (adjType == "Q") {
   adjType <- "FDR"
 }
 
-cat("===", format(Sys.time(), "%Y %b %d %X"), paste("=== processing ", myPath, " (", adjType, ")\n", sep=''))
+f.print.message <- function(x) { cat("=== ", format(Sys.time(), "%Y %b %d %X"), paste0("=== ", x,"\n")) }
+
+f.print.message(paste0("processing ", myPath, " (", adjType, ")\n"))
 meth <- read.table(myPath, sep = "\t", header = TRUE, stringsAsFactors = FALSE)
-cat("===", format(Sys.time(), "%Y %b %d %X"), paste("=== adjusting ", myPath, "\n", sep=''))
+f.print.message(paste0("adjusting ", myPath, "\n"))
 toAdjust <- grep("^P_", colnames(meth), value = TRUE)
 for (tA in toAdjust) {
   meth[[tA]] <- as.numeric(meth[[tA]])
@@ -33,7 +35,8 @@ for (tA in toAdjust) {
     meth[[tAnew]] <- p.adjust(meth[[tA]], "BH")
   }
 }
-cat("===", format(Sys.time(), "%Y %b %d %X"), paste("=== writing ", paste0(myPath, ".adj"), "\n", sep=''))
+f.print.message(paste0("writing ", paste0(myPath, ".adj"), "\n"))
 write.table(meth, paste0(myPath, ".adj"), sep = '\t', quote = FALSE)
-cat("===", format(Sys.time(), "%Y %b %d %X"), "=== finished.\n")
+f.print.message("finished.\n")
+
 
