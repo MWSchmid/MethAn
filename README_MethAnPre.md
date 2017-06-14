@@ -189,7 +189,6 @@ cat merged_*.txt.noGroupFilter | awk '{if (NR<2) {print} else {if ($1!="chrom") 
 
 # split large files into smaller chunks for the models in R
 awk -v PREF="forModels" 'BEGIN{LASTPOS=-1;LASTBIN=0;CUROUT=PREF"_split_"LASTBIN".txt"}{CURBIN=int((NR-1)/6000000);CURPOS=$2;if((CURBIN!=LASTBIN)&&(CURPOS!=LASTPOS)){CUROUT=PREF"_split_"CURBIN".txt";LASTBIN=CURBIN};LASTPOS=CURPOS;if(NR>1){print>CUROUT}}' merged.txt
-done
 
 # run the Rscript with the model (check the example R-script)
 NUMCORES=4 # the number of parallel processes
