@@ -1332,8 +1332,6 @@ f.plot.gene.or.position.clusters <- function(dat, samVec, colVec, rDir=NA, outPr
   invisible(NULL)
 }
 
-
-
 # some totally unrelated stuff - expand.grid should do the same...
 
 f.combine.recursive <- function(facList, index, combination, combinationList) {

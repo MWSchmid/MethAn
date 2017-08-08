@@ -16,39 +16,6 @@ import textwrap
 import operator
 logging.basicConfig(format="=== %(levelname)s === %(asctime)s === %(message)s", level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
-class methBin():
-    def __init__(self, chrom, start, end):
-        self.chrom = chrom
-        self.start = start
-        self.end = end
-        self.anyContext = ["CpG", "CG", "CHG", "CHH"]
-        self.count = dict([(x, 0) for x in self.anyContext])
-        self.meth = dict([(x, 0) for x in self.anyContext])
-    
-    def __str__(self):
-        outLines = []
-        for ctxt in self.anyContext:
-            if self.count[ctxt] > 0:
-                aveMeth = self.meth[ctxt]/self.count[ctxt]
-            else:
-                aveMeth = "NA"
-            outLines.append('\t'.join([self.chrom, str(self.start), str(self.end), ctxt, str(aveMeth)]))
-        out = '\n'.join(outLines)
-        return out
-    
-    def hasValues(self):
-        for ctxt in self.anyContext:
-            if self.count[ctxt] > 0:
-                return True
-        return False
-    
-    def tryToAddPosition(self, chrom, position, ctxt, percMeth):
-        if (chrom != self.chrom) or (position < self.start) or (position >= self.end): # half open
-            return False
-        self.count[ctxt] += 1
-        self.meth[ctxt] += percMeth
-        return True
-
 def correctBedGraph(bedGraphFile, chromSizesFile):
     chromSizes = {}
     with open(chromSizesFile, 'rb') as infile:
