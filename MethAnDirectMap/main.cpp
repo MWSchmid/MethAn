@@ -33,7 +33,7 @@ public:
         this->chrom = chrom;
         this->strand = ".";
         this->position = position.toUInt();
-        this->methylated = floor(this->coverage*(this->percentMethylated/100.0));
+        this->methylated = floor(this->coverage*(this->percentMethylated/100.0) + 0.5); // that's like round
         this->unmethylated = this->coverage-this->methylated;
         this->context = context;
         this->otherData.clear();
