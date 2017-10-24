@@ -1263,8 +1263,6 @@ f.plot.pheatmap <- function(dat, rDir='', outPrefix='', maxPos=5000, numCenters=
   invisible(NULL)
 }
 
-
-
 #' plot gene/position clusters
 #'@param dat table with values
 #'@param samVec a vector with the column names which should be used
@@ -1316,16 +1314,83 @@ f.plot.gene.or.position.clusters <- function(dat, samVec, colVec, rDir=NA, outPr
     xPos <- 1:nrow(temp)
     lines(xPos, temp[,1], lty="dotted", col="gray60")
     #points(xPos, temp[,1], pch="---", cex=3, col=colVec[samVec])
-    meanTicks <- cbind(xPos-0.2, xPos+0.2, temp[,1], temp[,1], colVec[samVec])
-    apply(meanTicks, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
     #sem <- cbind(1:nrow(temp), 1:nrow(temp), temp[,1]-temp[,2], temp[,1]+temp[,2], colVec[samVec])
     #apply(sem, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], lwd = 2))
     #apply(sem, 1, function(x) points(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], pch="-", cex=2))
+    meanTicks <- cbind(xPos-0.2, xPos+0.2, temp[,1], temp[,1], colVec[samVec])
+    apply(meanTicks, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
     semLines <- cbind(xPos, xPos, temp[,1]-temp[,2], temp[,1]+temp[,2], colVec[samVec])
     apply(semLines, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
     semTicksTop <- cbind(xPos-0.15, xPos+0.15, temp[,1]+temp[,2], temp[,1]+temp[,2], colVec[samVec])
     apply(semTicksTop, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
     semTicksBottom <- cbind(xPos-0.15, xPos+0.15, temp[,1]-temp[,2], temp[,1]-temp[,2], colVec[samVec])
+    apply(semTicksBottom, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
+  }
+  f.close.figure()
+  invisible(NULL)
+}
+
+#' plot gene/position clusters
+#'@param dat table with values
+#'@param samVec a vector with the column names which should be used
+#'@param colVec a vector with colors, named according to <samVec>
+#'@param rDir [NA] result directory (can be NA or "" - plots directly in R)
+#'@param outPrefix [NA] a prefix for the file name
+#'@param maxPos [10000] maximal number of rows to plot
+#'@param numCenters [1000] number of centroids to use in case there are too many positions
+#'@param clusterNumberRange [1:20] numbers of clusters to test Mclust(G=clusterNumberRange) - don't use more than 25 (image size)
+#'@return
+#'@note 
+#'@author Marc W. Schmid \email{contact@@mwschmid.ch}.
+#'@export
+f.plot.gene.or.position.clusters.quartiles <- function(dat, samVec, colVec, rDir=NA, outPrefix="default", maxPos=1e4, numCenters=1e3, clusterNumberRange=1:20) {
+  require("cluster")
+  require("mclust")
+  dat <- dat[,samVec]
+  if (nrow(dat) > maxPos) {
+    f.print.message(paste0("f.plot.gene.or.position.clusters: using ", numCenters," kmeans centers for the plot."))
+    someClusters <- kmeans(dat, numCenters, iter.max=1000)
+    if (someClusters$ifault == 4) {
+      f.print.message(paste0("f.plot.gene.or.position.clusters: Quick-TRANSfer warning detected, trying gc(), round() and more iterations."))
+      gc()
+      someClusters <- kmeans(round(dat, 2), numCenters, iter.max=5000)
+    }
+    if (someClusters$ifault == 4) {
+      f.print.message(paste0("f.plot.gene.or.position.clusters: Quick-TRANSfer warning detected again. Trying other algorithm."))
+      someClusters <- kmeans(dat, numCenters, iter.max=1000, algorithm = "MacQueen")
+    }
+    save(someClusters, file = file.path(rDir, paste0(outPrefix, "_clusters_kMeans.Rdata")))
+    forFit <- someClusters$centers
+  } else {
+    f.print.message(paste0("f.plot.gene.or.position.clusters: using all data for the plot."))
+    someClusters <- NA
+    forFit <- dat
+  }
+  fit <- Mclust(forFit, G=clusterNumberRange)
+  save(fit, file = file.path(rDir, paste0(outPrefix, "_clusters_mclust.Rdata")))
+  print(summary(fit))
+  # figure
+  splitByCluster <- split(as.data.frame(fit$data), fit$classification)
+  toPlot <- lapply(splitByCluster, function(x) cbind(apply(x,2,median), apply(x,2, function(y) quantile(y, 0.25)), apply(x,2, function(y) quantile(y, 0.75)))) #/sqrt(nrow(x))
+  #f.open.figure(rDir, paste0(outPrefix, "_clusters.tiff"), FALSE, width = 1500, height = 1500, pointsize = 20)
+  f.open.figure(rDir, paste0(outPrefix, "_clusters.svg"), TRUE, width = 20, height = 20)
+  par(mfrow=c(5,5)) # no smart guessing
+  for (temp in toPlot) {
+    temp <- temp[samVec,]
+    plot(NA, type="n", bty="n", ylim=c(0,100), xlim=c(1, nrow(temp)), ylab="methylation (%)", xlab="tissues", las = 1)
+    xPos <- 1:nrow(temp)
+    lines(xPos, temp[,1], lty="dotted", col="gray60")
+    #points(xPos, temp[,1], pch="---", cex=3, col=colVec[samVec])
+    #sem <- cbind(1:nrow(temp), 1:nrow(temp), temp[,1]-temp[,2], temp[,1]+temp[,2], colVec[samVec])
+    #apply(sem, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], lwd = 2))
+    #apply(sem, 1, function(x) points(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5], pch="-", cex=2))
+    meanTicks <- cbind(xPos-0.2, xPos+0.2, temp[,1], temp[,1], colVec[samVec])
+    apply(meanTicks, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
+    semLines <- cbind(xPos, xPos, temp[,2], temp[,3], colVec[samVec])
+    apply(semLines, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
+    semTicksTop <- cbind(xPos-0.15, xPos+0.15, temp[,3], temp[,3], colVec[samVec])
+    apply(semTicksTop, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
+    semTicksBottom <- cbind(xPos-0.15, xPos+0.15, temp[,2], temp[,2], colVec[samVec])
     apply(semTicksBottom, 1, function(x) lines(as.numeric(x[1:2]), as.numeric(x[3:4]), col=x[5]))
   }
   f.close.figure()
