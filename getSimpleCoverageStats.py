@@ -31,6 +31,14 @@ import textwrap
 import operator
 logging.basicConfig(format="=== %(levelname)s === %(asctime)s === %(message)s", level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 import math
+import gzip
+
+def myopen(fileName, mode="r"):
+    """open either a regular or a compressed file"""
+    if fileName.endswith(".gz"):
+        return gzip.open(fileName, mode=mode)
+    else:
+        return open(fileName, mode=mode)
 
 class coverageInfo():
     def __init__(self, chrom, ctxt, totCov, pCentMeth):
@@ -66,7 +74,7 @@ class coverageInfo():
 def getCoverageStats(fileName):
     stats = {}
     lineCounter = 0
-    with open(fileName, "rb") as infile:
+    with myopen(fileName, "rb") as infile:
         for line in infile:
             lineCounter += 1
             if (lineCounter % 1000000) == 0:
