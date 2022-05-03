@@ -14,6 +14,7 @@ import sys
 import logging
 import textwrap
 import os
+import gzip
 logging.basicConfig(format="=== %(levelname)s === %(asctime)s === %(message)s", level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
 class anySequence:
@@ -118,9 +119,16 @@ class PROTEINsequence(anySequence):
     def __init__(self, name=None, seq=None):
         anySequence.__init__(self, name, seq.upper())
 
+def myopen(fileName, mode="r"):
+    """open either a regular or a compressed file"""
+    if fileName.endswith(".gz"):
+        return gzip.open(fileName, mode=mode)
+    else:
+        return open(fileName, mode=mode)
+
 def loadSequenceFromFasta(infileName):
     out = {}
-    with open(infileName, 'rb') as infile:
+    with myopen(infileName, 'rb') as infile:
         for line in infile:
             line = line.decode("ascii").rstrip('\n')
             if line[0] == ">":

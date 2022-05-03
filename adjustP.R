@@ -17,9 +17,9 @@ if (adjType == "Q") {
 
 f.print.message <- function(x) { cat("=== ", format(Sys.time(), "%Y %b %d %X"), paste0("=== ", x,"\n")) }
 
-f.print.message(paste0("processing ", myPath, " (", adjType, ")\n"))
+f.print.message(paste0("processing ", myPath, " (", adjType, ")"))
 meth <- read.table(myPath, sep = "\t", header = TRUE, stringsAsFactors = FALSE)
-f.print.message(paste0("adjusting ", myPath, "\n"))
+f.print.message(paste0("adjusting ", myPath))
 toAdjust <- grep("^P_", colnames(meth), value = TRUE)
 for (tA in toAdjust) {
   meth[[tA]] <- as.numeric(meth[[tA]])
@@ -35,8 +35,8 @@ for (tA in toAdjust) {
     meth[[tAnew]] <- p.adjust(meth[[tA]], "BH")
   }
 }
-f.print.message(paste0("writing ", paste0(myPath, ".adj"), "\n"))
+f.print.message(paste0("writing ", paste0(myPath, ".adj")))
 write.table(meth, paste0(myPath, ".adj"), sep = '\t', quote = FALSE)
-f.print.message("finished.\n")
+f.print.message("finished.")
 
 

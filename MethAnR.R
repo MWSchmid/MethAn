@@ -991,6 +991,7 @@ f.draw.distance.between.DMCs.combined.get.random.mean.sd <- function(dmcTable, a
 #'@export
 f.draw.distance.between.DMCs.combined <- function(dmcTable, allPositions, rDir, numRep, filePrefix = "") {
   DMCdistances <- f.get.distances.between(dmcTable)
+  DMCdistances <- DMCdistances[!is.na(DMCdistances)] # added 16th of July 2019
   randomData <- f.draw.distance.between.DMCs.combined.get.random.mean.sd(dmcTable, allPositions, numRep)
   svgOutfile <- file.path(rDir, paste(filePrefix, "distances_between_DMCs.svg", sep = ''))
   pngOutfile <- file.path(rDir, paste(filePrefix, "distances_between_DMCs.png", sep = ''))

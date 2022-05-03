@@ -160,12 +160,13 @@ class genomeHandler:
 	
 	def loadAnnotation(self):
 		reg_meta_agi = re.compile('AT\w{2,2}\d{5,5}', re.IGNORECASE)
-		with open("/home/marc/MethAn/data/TAIR10.v2.sorted.gff", 'r') as infile:
+		chromTranslator = {"Chr1":"1", "Chr2":"2", "Chr3":"3", "Chr4":"4", "Chr5":"5", "ChrC":"Mt", "ChrM":"Pt"}
+		with open("/media/mwschmid/archiveNoBackup/genomes/arabidopsis/Araport11/Araport11_GFF3_genes_transposons.201606.gff", 'r') as infile:
 			for line in infile:
-				if "protein_coding_gene" not in line:
+				if "protein_coding" not in line:
 					continue
 				fields = line[:-1].split('\t')
-				chrom = fields[0]
+				chrom = chromTranslator[fields[0]]
 				start = int(fields[3]) - 1 # to make it zero-based
 				end = int(fields[4]) # - 1 # to make it zero-based -> not applicable here because we access it via the list
 				strand = fields[6]
