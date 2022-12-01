@@ -141,21 +141,43 @@ def loadSequenceFromFasta(infileName):
     return out
 
 def printChromPosContext(chrom, seq):
+    trans = {"A":"T",
+            "T":"A",
+            "C":"G",
+            "G":"C",
+            "R":"Y",
+            "Y":"R",
+            "K":"M",
+            "M":"K",
+            "S":"W",
+            "W":"S",
+            "B":"V",
+            "D":"H",
+            "H":"D",
+            "V":"B",
+            "N":"N"}
     seq = seq.upper()
     for i, b in enumerate(seq):
-        if b != 'C':
+        if b not in ['C', 'G']:
             continue
-        try:
-            subSeq = seq[i:(i+3)]
-        except IndexError:
-            continue
+        if b == 'C':
+            try:
+                subSeq = seq[i:(i+3)]
+            except IndexError:
+                continue
+        else:
+            try:
+                subSeq = seq[(i-2):(i+1)]
+                subSeq = ''.join([trans[x] for x in subSeq[::-1]])
+            except IndexError:
+                continue
         numOKchars = sum([subSeq.count(x) for x in "ACGTH"])
         if numOKchars != 3:
             continue
-        if seq[i+1] == 'G': # CG
+        if subSeq[1] == 'G': # CG
             sys.stdout.write('\t'.join([chrom, str(i), "CG"])+'\n')
             continue
-        if seq[i+2] == 'G': # CHG
+        if subSeq[2] == 'G': # CHG
             sys.stdout.write('\t'.join([chrom, str(i), "CHG"])+'\n')
             continue
         sys.stdout.write('\t'.join([chrom, str(i), "CHH"])+'\n') #CHH
@@ -164,7 +186,6 @@ def getAllPossibleCytosines(fastaFile):
     sequences = loadSequenceFromFasta(fastaFile)
     for seqName, seq in sequences.items():
         printChromPosContext(seqName, seq.getseq())
-        printChromPosContext(seqName, seq.revcompl())
 
 if __name__ == '__main__':
 
